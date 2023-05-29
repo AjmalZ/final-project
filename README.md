@@ -1,4 +1,4 @@
-# Project Auth API
+# Final project
 
 Replace this readme with your own information about your project.
 
