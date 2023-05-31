@@ -1,0 +1,135 @@
+/* log out button */
+.logOutBtn {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 45px;
+    height: 45px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition-duration: .3s;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
+    background-color: rgb(5, 65, 65);
+  }
+  
+  /* plus sign */
+  .sign {
+    width: 100%;
+    transition-duration: .3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .sign svg {
+    width: 17px;
+  }
+  
+  .sign svg path {
+    fill: white;
+  }
+  /* text */
+  .logOutText {
+    position: absolute;
+    right: 0%;
+    width: 0%;
+    opacity: 0;
+    color: white;
+    font-size: 1.2em;
+    font-weight: 600;
+    transition-duration: .3s;
+  }
+  /* hover effect on button width */
+  .logOutBtn:hover {
+    width: 125px;
+    border-radius: 40px;
+    transition-duration: .3s;
+  }
+  
+  .logOutBtn:hover .sign {
+    width: 30%;
+    transition-duration: .3s;
+    padding-left: 20px;
+  }
+  /* hover effect button's text */
+  .logOutBtn:hover .logOutText {
+    opacity: 1;
+    width: 70%;
+    transition-duration: .3s;
+    padding-right: 10px;
+  }
+  /* button click effect*/
+  .logOutBtn:active {
+    transform: translate(2px ,2px);
+  }
+  /*end of log out button*/
+
+  input {
+    background-color: #eee;
+    border: none;
+    padding: 1rem;
+    font-size: 1rem;
+    width: 13em;
+    border-radius: 1rem;
+    cursor: pointer;
+    margin: 15px 0px 15px 0px;
+  }
+  
+  input:focus {
+    outline: none;
+  }
+
+  .postBtn {
+        height: 50px;
+        margin: 5px;
+        width: 120px;
+        background: #333;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        border: solid #404C5D 1px;
+        font-size: 16px;
+        color: rgb(161, 161, 161);
+        -webkit-transition: 500ms;
+        transition: 500ms;
+        border-radius: 5px;
+        background: linear-gradient(145deg, #2e2d2d, #212121);
+        -webkit-box-shadow: -1px -5px 15px #41465B, 
+                     5px  5px 15px #41465B, 
+          inset      5px  5px 10px #212121, 
+          inset     -5px -5px 10px #212121;
+        box-shadow: -1px -5px 15px #41465B, 
+                     5px  5px 15px #41465B, 
+          inset      5px  5px 10px #212121, 
+          inset     -5px -5px 10px #212121;
+      }
+      
+      .postBtn:hover {
+        -webkit-box-shadow: 1px 1px 13px #20232e,
+                          -1px -1px 13px #545b78;
+        box-shadow: 1px 1px 13px #20232e,
+                   -1px -1px 13px #545b78;
+        color: #d6d6d6;
+        -webkit-transition: 500ms;
+        transition: 500ms;
+      }
+      
+      .postBtn:active {
+        -webkit-box-shadow: 1px 1px 13px #20232e,
+                           -1px -1px 33px #545b78;
+        box-shadow: 1px 1px 13px #20232e,
+                   -1px -1px 33px #545b78;
+        color: #d6d6d6;
+        -webkit-transition: 100ms;
+        transition: 100ms;
+      }
+
+      .messageForm{
+        align-items: center;
+      }
