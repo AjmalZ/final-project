@@ -71,8 +71,10 @@ export const Main = () => {
     return (
         <>
             <TopBar />
+            <div>
+                {username ? <h1>THESE ARE THE TASKS OF {username.toUpperCase()}</h1> : ''}
+            </div>
             <SideBar />
-            {username ? <h1>THESE ARE THE TASKS OF {username.toUpperCase()}</h1> : ''}
         </>
     );
 };

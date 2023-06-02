@@ -26,7 +26,6 @@ app.get("/", (req, res) => {
 });
 
 // Define the User schema for the MongoDB collection
-const { Schema } = mongoose;
 
 const UserSchema = new mongoose.Schema({
   username: {
@@ -149,7 +148,7 @@ const authenticateUser = async (req, res, next) => {
 // Define the route for fetching tasks ("/tasks")
 app.get("/tasks", authenticateUser);
 app.get("/tasks", async (req, res) => {
-  const accessToken = req.header("Authorization"); // Extract the access token from the request header
+  const accessToken = req.header("Authorization").replace("Bearer ", ""); // Extract the access token from the request header and remove the "Bearer " prefix
   const user = await User.findOne({ accessToken: accessToken }); // Find the user associated with the access token
   const tasks = await Task.find({ user: user._id }); // Find all tasks associated with the user's ID
 
