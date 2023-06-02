@@ -106,6 +106,10 @@ app.post("/login", async (req, res) => {
 
 // Define the Task schema for the MongoDB collection
 const TaskSchema = new mongoose.Schema({
+  title: {
+    type: String,
+  },
+
   message: {
     type: String
 
@@ -159,10 +163,10 @@ app.get("/tasks", async (req, res) => {
 // Define the route for creating a new task ("/tasks")
 app.post("/tasks", authenticateUser);
 app.post("/tasks", async (req, res) => {
-  const { message } = req.body; // Extract the message from the request body
+  const { title, message } = req.body; // Extract the message from the request body
   const accessToken = req.header("Authorization"); // Extract the access token from the request header
   const user = await User.findOne({ accessToken: accessToken }); // Find the user associated with the access token
-  const task = await new Task({ message: message, user: user._id }).save(); // Create a new Task instance and save it to the database
+  const task = await new Task({ title: title, message: message, user: user._id }).save(); // Create a new Task instance and save it to the database
 
   res.status(200).json({ success: true, response: task });
 });
