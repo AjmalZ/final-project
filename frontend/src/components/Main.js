@@ -35,6 +35,7 @@ export const Main = () => {
             .then((res) => res.json())
             .then((data) => {
                 if (data.success) {
+                    console.log(data.response);
                     dispatch(tasks.actions.setError(null));
                     dispatch(tasks.actions.setItems(data.response));
                 } else {
@@ -73,6 +74,11 @@ export const Main = () => {
             <TopBar />
             <div>
                 {username ? <h1>THESE ARE THE TASKS OF {username.toUpperCase()}</h1> : ''}
+                {taskItems.map((task) => (
+                    <div key={task._id}>
+                        <textarea value={task.message}></textarea>
+                    </div>
+                ))}
             </div>
             <SideBar />
         </>
