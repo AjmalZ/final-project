@@ -114,6 +114,9 @@ const TaskSchema = new mongoose.Schema({
     type: String
 
   },
+  status: {
+    type: String
+  },
   createdAt: {
     type: Date,
     default: () => new Date()

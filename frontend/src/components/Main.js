@@ -6,6 +6,7 @@ import { API_URL } from 'utils/urls';
 import { user } from 'reducers/User';
 import { TopBar } from './TopBar';
 import { SideBar } from './SideBar';
+import { ToDoCard } from './ToDoCard';
 import './Main.css';
 
 export const Main = () => {
@@ -75,10 +76,74 @@ export const Main = () => {
             <div>
                 {username ? <h1>THESE ARE THE TASKS OF {username.toUpperCase()}</h1> : ''}
                 {taskItems.map((task) => (
-                    <div key={task._id}>
-                        <h2>{task.message}</h2>
-                    </div>
+                    <ToDoCard task={task} />
                 ))}
+            </div>
+            <div className="grid grid-cols-4 gap-5">
+                <div className="bg-gray-100 p-3">
+                    <h4 className="flex justify-between items-center">
+                        <span className="text-2xl text-gray-600">Backlog</span>
+                    </h4>
+
+                    <div className="bg-white rounded-md ">
+                        <label className="bg-gradient-to-r from-blue-500 to-blue px-2">
+                            Low priority
+                        </label>
+                        <div className="text-gray-600 text-sm">
+                            {taskItems.map((task) => (
+                                <ToDoCard task={task} />
+                            ))}
+                        </div>
+                    </div>
+                </div>
+                <div className="bg-gray-100 p-3">
+                    <h4 className="flex justify-between items-center">
+                        <span className="text-2xl text-gray-600">Backlog</span>
+                    </h4>
+
+                    <div className="bg-white rounded-md ">
+                        <label className="bg-gradient-to-r from-blue-500 to-blue px-2">
+                            Low priority
+                        </label>
+                        <div className="text-gray-600 text-sm">
+                            {/*taskItems.filter((filteredTask) => filteredTask.status === 'todo').map((task) => (
+                                <ToDoCard task={task} />
+                            ))*/}
+                        </div>
+                    </div>
+                </div>
+                <div className="bg-gray-100 p-3">
+                    <h4 className="flex justify-between items-center">
+                        <span className="text-2xl text-gray-600">Backlog</span>
+                    </h4>
+
+                    <div className="bg-white rounded-md ">
+                        <label className="bg-gradient-to-r from-blue-500 to-blue px-2">
+                            Low priority
+                        </label>
+                        <div className="text-gray-600 text-sm">
+                            {taskItems.map((task) => (
+                                <ToDoCard task={task} />
+                            ))}
+                        </div>
+                    </div>
+                </div>
+                <div className="bg-gray-100 p-3">
+                    <h4 className="flex justify-between items-center">
+                        <span className="text-2xl text-gray-600">Backlog</span>
+                    </h4>
+
+                    <div className="bg-white rounded-md ">
+                        <label className="bg-gradient-to-r from-blue-500 to-blue px-2">
+                            Low priority
+                        </label>
+                        <div className="text-gray-600 text-sm">
+                            {taskItems.map((task) => (
+                                <ToDoCard task={task} />
+                            ))}
+                        </div>
+                    </div>
+                </div>
             </div>
             <SideBar />
         </>
