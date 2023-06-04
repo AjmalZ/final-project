@@ -17,7 +17,9 @@ export const Main = () => {
     const accessToken = useSelector((store) => store.user.accessToken);
     const username = useSelector((store) => store.user.username);
     const navigate = useNavigate();
-    /*const [message, setMessage] = useState('');*/
+    const [taskTitle, setTaskTitle] = useState('');
+    const [taskDescription, setTaskDescription] = useState('');
+    const [taskCategory, setTaskCategory] = useState('');
 
     useEffect(() => {
         if (!accessToken) {
@@ -60,14 +62,13 @@ export const Main = () => {
     }, [accessToken, dispatch]);
 
     const addTask = (e) => {
-        e.preventDefault();
         const options = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: accessToken,
             },
-            body: JSON.stringify({ title: "testing task", category: "647ce18feff3b2ebf815b859", user: user._id }),
+            body: JSON.stringify({ title: taskTitle, description: taskDescription, category: taskCategory, user: user._id }),
         };
 
         fetch(API_URL('tasks'), options)
@@ -85,7 +86,16 @@ export const Main = () => {
 
     return (
         <>
-            <TopBar addTask={addTask} />
+            <TopBar
+                categories={categories}
+                addTask={addTask}
+                taskTitle={taskTitle}
+                taskDescription={taskDescription}
+                taskCategory={taskCategory}
+                setTaskTitle={setTaskTitle}
+                setTaskCategory={setTaskCategory}
+                setTaskDescription={setTaskDescription}
+            />
             <div>
                 {username ? <h1>THESE ARE THE TASKS OF {username.toUpperCase()}</h1> : ''}
             </div>
