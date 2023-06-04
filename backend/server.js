@@ -115,7 +115,8 @@ const TaskSchema = new mongoose.Schema({
 
   },
   category: {
-    type: String
+    type: String,
+    required: true
   },
   createdAt: {
     type: Date,
@@ -183,7 +184,7 @@ app.post("/tasks", async (req, res) => {
   const { title, message, category } = req.body; // Extract the message from the request body
   const accessToken = req.header("Authorization"); // Extract the access token from the request header
   const user = await User.findOne({ accessToken: accessToken }); // Find the user associated with the access token
-  const task = await new Task({ category: category._id, title: title, message: message, user: user._id }).save(); // Create a new Task instance and save it to the database
+  const task = await new Task({ category: category, title: title, message: message, user: user._id }).save(); // Create a new Task instance and save it to the database
 
   res.status(200).json({ success: true, response: task });
 });

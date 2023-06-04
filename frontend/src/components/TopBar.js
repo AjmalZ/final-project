@@ -4,7 +4,7 @@ import { user } from 'reducers/User';
 import { SideBarBtn } from './SideBarBtn';
 
 
-export const TopBar = () => {
+export const TopBar = ({ addTask }) => {
     const dispatch = useDispatch();
 
     const handleLogoutClick = () => {
@@ -12,6 +12,7 @@ export const TopBar = () => {
         dispatch(user.actions.setUsername(null));
         dispatch(user.actions.setUserId(null));
     };
+
     return (
         <div className="navbar bg-base-300">
             <div className="flex-1">
@@ -19,7 +20,7 @@ export const TopBar = () => {
             </div>
             <div className="flex-none gap-2">
                 <div className="form-control">
-                    <button className="btn btn-primary">+Add New Task</button>
+                    <button className="btn btn-primary" onClick={addTask}>+Add New Task</button>
                 </div>
                 <div className="dropdown dropdown-end">
                     <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
