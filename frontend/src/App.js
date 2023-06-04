@@ -7,12 +7,14 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit'; // Import fu
 import { user } from 'reducers/User'; // Import the user reducer from the 'reducers/user' file
 import { tasks } from 'reducers/Tasks'; // Import the tasks reducer from the 'reducers/tasks' file
 import { Provider } from 'react-redux'; // Import the Provider component from the 'react-redux' library
+import { category } from 'reducers/Category'; // Import the tasks reducer from the 'reducers/tasks' file
 
 export const App = () => {
 
   const reducer = combineReducers({
     user: user.reducer,
-    tasks: tasks.reducer
+    tasks: tasks.reducer,
+    category: category.reducer
   }); // Combine the user and tasks reducers into a single reducer using the combineReducers function
 
   const store = configureStore({ reducer }) // Create the Redux store using the combined reducer

@@ -114,7 +114,7 @@ const TaskSchema = new mongoose.Schema({
     type: String
 
   },
-  status: {
+  category: {
     type: String
   },
   createdAt: {
@@ -126,6 +126,20 @@ const TaskSchema = new mongoose.Schema({
     required: true
   }
 });
+
+const CategorySchema = new mongoose.Schema({
+  title: {
+    type: String
+  },
+  user: {
+    type: String,
+    required: true
+  }
+});
+
+// Create a Category model based on the Category schema
+const Category = mongoose.model("Category", CategorySchema);
+
 
 // Create a Task model based on the Task schema
 const Task = mongoose.model("Task", TaskSchema);
@@ -166,12 +180,33 @@ app.get("/tasks", async (req, res) => {
 // Define the route for creating a new task ("/tasks")
 app.post("/tasks", authenticateUser);
 app.post("/tasks", async (req, res) => {
-  const { title, message } = req.body; // Extract the message from the request body
+  const { title, message, category } = req.body; // Extract the message from the request body
   const accessToken = req.header("Authorization"); // Extract the access token from the request header
   const user = await User.findOne({ accessToken: accessToken }); // Find the user associated with the access token
-  const task = await new Task({ title: title, message: message, user: user._id }).save(); // Create a new Task instance and save it to the database
+  const task = await new Task({ category: category._id, title: title, message: message, user: user._id }).save(); // Create a new Task instance and save it to the database
 
   res.status(200).json({ success: true, response: task });
+});
+
+// Define the route for fetching category ("/category")
+app.get("/category", authenticateUser);
+app.get("/category", async (req, res) => {
+  const accessToken = req.header("Authorization"); // Extract the access token from the request header
+  const user = await User.findOne({ accessToken: accessToken }); // Find the user associated with the access token
+  const category = await Category.find({ user: user._id }); // Find all category associated with the user's ID
+
+  res.status(200).json({ success: true, response: category });
+});
+
+// Define the route for creating a new category ("/category")
+app.post("/category", authenticateUser);
+app.post("/category", async (req, res) => {
+  const { title } = req.body; // Extract the message from the request body
+  const accessToken = req.header("Authorization"); // Extract the access token from the request header
+  const user = await User.findOne({ accessToken: accessToken }); // Find the user associated with the access token
+  const category = await new Category({ title: title, user: user._id }).save(); // Create a new category instance and save it to the database
+
+  res.status(200).json({ success: true, response: category });
 });
 
 // Start the server
