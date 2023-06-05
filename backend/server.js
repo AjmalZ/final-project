@@ -189,6 +189,73 @@ app.post("/tasks", async (req, res) => {
   res.status(200).json({ success: true, response: task });
 });
 
+
+// Define the route for updating a task ("/tasks")
+app.patch("/tasks", authenticateUser);
+app.patch("/tasks", async (req, res) => {
+  const { title, message, category } = req.body; // Extract the message from the request body
+  const accessToken = req.header("Authorization"); // Extract the access token from the request header
+  const user = await User.findOne({ accessToken: accessToken }); // Find the user associated with the access token
+  const task = await new Task({ category: category, title: title, message: message, user: user._id }).save(); // Create a new Task instance and save it to the database
+
+  res.status(200).json({ success: true, response: task });
+});
+
+app.patch("/tasks/:taskId", authenticateUser);
+app.patch("/tasks/:taskId", async (req, res) => {
+  const { title, message, category } = req.body; // Extract the updated task details from the request body
+  const { taskId } = req.params; // Extract the task ID from the request parameters
+  const accessToken = req.header("Authorization"); // Extract the access token from the request header
+
+  try {
+    const user = await User.findOne({ accessToken: accessToken }); // Find the user associated with the access token
+    const task = await Task.findOne({ _id: taskId, user: user._id }); // Find the task with the provided ID and associated with the user's ID
+
+    if (task) {
+      // Update only the fields that are provided in the request body
+      if (title) task.title = title;
+      if (message) task.message = message;
+      if (category) task.category = category;
+
+      const updatedTask = await task.save(); // Save the updated task
+
+      res.status(200).json({ success: true, response: updatedTask });
+    } else {
+      res.status(404).json({
+        success: false,
+        response: "Task not found"
+      });
+    }
+  } catch (e) {
+    res.status(500).json({
+      success: false,
+      response: e
+    });
+  }
+});
+
+// Define the route for deleting a task ("/tasks/:taskId")
+app.delete("/tasks/:taskId", authenticateUser);
+app.delete("/tasks/:taskId", async (req, res) => {
+  const { taskId } = req.params; // Extract the task ID from the request parameters
+  const accessToken = req.header("Authorization"); // Extract the access token from the request header
+
+  try {
+    const user = await User.findOne({ accessToken: accessToken }); // Find the user associated with the access token
+    const task = await Task.findOne({ _id: taskId, user: user._id }); // Find the task with the provided ID and associated with the user's ID
+
+    if (task) {
+      await task.remove(); // Remove the task from the database
+
+      res.status(200).json({ success: true, response: "Task deleted successfully" });
+    } else {
+      res.status(404).json({ success: false, response: "Task not found" });
+    }
+  } catch (e) {
+    res.status(500).json({ success: false, response: e });
+  }
+});
+
 // Define the route for fetching category ("/category")
 app.get("/category", authenticateUser);
 app.get("/category", async (req, res) => {
