@@ -10,6 +10,7 @@ import { SideBar } from './SideBar';
 import { ToDoCard } from './ToDoCard';
 import './Main.css';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+import { CategoryColumn } from './CategoryColumn';
 
 export const Main = () => {
     const taskItems = useSelector((store) => store.tasks.items);
@@ -24,6 +25,8 @@ export const Main = () => {
     const [taskCategory, setTaskCategory] = useState(categories.length > 0 ? categories[0]._id : null);
 
     const [categoryTitle, setCategoryTitle] = useState('');
+    const [categoryInactive, setCategoryInactive] = useState(false);
+    const [taskDueDate, setTaskDueDate] = useState("");
 
 
     useEffect(() => {
@@ -46,6 +49,7 @@ export const Main = () => {
             .then((data) => {
                 if (data.success) {
                     dispatch(tasks.actions.setError(null));
+
                     dispatch(tasks.actions.setItems(data.response));
                 } else {
                     dispatch(tasks.actions.setError(data.error));
@@ -74,7 +78,7 @@ export const Main = () => {
                 'Content-Type': 'application/json',
                 Authorization: accessToken,
             },
-            body: JSON.stringify({ title: taskTitle, message: taskMessage, category: cat, user: user._id }),
+            body: JSON.stringify({ title: taskTitle, message: taskMessage, dueDate: taskDueDate, category: cat, user: user._id }),
         };
 
         fetch(API_URL('tasks'), options)
@@ -116,7 +120,7 @@ export const Main = () => {
                 'Content-Type': 'application/json',
                 Authorization: accessToken,
             },
-            body: JSON.stringify({ title: taskTitle, message: taskMessage, category: taskCategory }),
+            body: JSON.stringify({ title: taskTitle, message: taskMessage, duDate: taskDueDate, category: taskCategory }),
         };
 
         fetch(API_URL(`tasks/${taskId}`), options)
@@ -132,15 +136,40 @@ export const Main = () => {
             });
     };
 
-    //This should be removed, use the one above
-    const updateTaskDropped = (taskId, title, message, cat) => {
+    const updateCategory = (categoryId) => {
+        const inactive = categoryInactive === "on" ? true : false;
         const options = {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: accessToken,
             },
-            body: JSON.stringify({ title: title, message: message, category: cat }),
+            body: JSON.stringify({ title: categoryTitle, inactive: inactive }),
+        };
+        fetch(API_URL(`category/${categoryId}`), options)
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.success) {
+                    dispatch(category.actions.setError(null));
+                    const tempCategories = categories.map((item) => {
+                        return { ...item, title: item._id === categoryId ? categoryTitle : item.title };
+                    });
+                    dispatch(category.actions.setItems([...tempCategories]));
+                } else {
+                    dispatch(category.actions.setError(data.error));
+                }
+            });
+    };
+
+    //This should be removed, use the one above
+    const updateTaskDropped = (taskId, title, message, cat, dueDate) => {
+        const options = {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: accessToken,
+            },
+            body: JSON.stringify({ title: title, message: message, category: cat, duDate: dueDate }),
         };
 
         fetch(API_URL(`tasks/${taskId}`), options)
@@ -167,7 +196,7 @@ export const Main = () => {
         const tempTaskId = result.draggableId
         const tempCatId = result.destination.droppableId
         const tempTask = taskItems.find((task) => task._id === tempTaskId);
-        updateTaskDropped(tempTaskId, tempTask.title, tempTask.message, tempCatId)
+        updateTaskDropped(tempTaskId, tempTask.title, tempTask.message, tempCatId, tempTask.duDate);
         if (!destination) return;
 
         if (source.droppableId === destination.droppableId && source.index === destination.index) {
@@ -205,6 +234,9 @@ export const Main = () => {
                 setCategoryTitle={setCategoryTitle}
                 categoryTitle={categoryTitle}
                 addCategory={addCategory}
+                setTaskDueDate={setTaskDueDate}
+                taskDueDate={taskDueDate}
+                taskItems={taskItems}
             />
             <div>
                 {username ? <h1>Welcome {username.toUpperCase()}</h1> : ''}
@@ -220,9 +252,9 @@ export const Main = () => {
                                     style={{ backgroundColor: snapshot.isDraggingOver ? 'blue' : 'grey' }}
                                     {...provided.droppableProps}
                                 >
-                                    <h4 className="flex justify-between items-center">
-                                        <span className="text-base text-gray-600 mb-8 underline">{cat.title}</span>
-                                    </h4>
+                                    <div className="flex justify-between items-center">
+                                        <CategoryColumn category={cat} updateCategory={updateCategory} setCategoryTitle={setCategoryTitle} setCategoryInactive={setCategoryInactive} />
+                                    </div>
                                     {taskItems
                                         .filter((categoryTask) => categoryTask.category === cat._id)
                                         .map((task, index) => (
@@ -245,6 +277,7 @@ export const Main = () => {
                                                                     setTaskTitle={setTaskTitle}
                                                                     setTaskMessage={setTaskMessage}
                                                                     setTaskCategory={setTaskCategory}
+                                                                    setTaskDueDate={setTaskDueDate}
                                                                 />
                                                             </div>
                                                         </div>
@@ -254,8 +287,10 @@ export const Main = () => {
                                         ))}
                                     {provided.placeholder}
                                 </div>
+
                             )}
                         </Droppable>
+
                     ))}
                 </DragDropContext>
 

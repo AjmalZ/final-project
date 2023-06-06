@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const ToDoCard = ({ task, categories, updateTask, setTaskTitle, setTaskMessage, setTaskCategory }) => {
+export const ToDoCard = ({ task, categories, updateTask, setTaskTitle, setTaskMessage, setTaskCategory, setTaskDueDate }) => {
     const selectedCategory = task.category ?? categories[0]
 
     const update = (event) => {
@@ -10,6 +10,10 @@ export const ToDoCard = ({ task, categories, updateTask, setTaskTitle, setTaskMe
     const handleChange = (event) => {
         setTaskCategory(event.target.value)
     };
+
+    const dateObject = new Date(task.dueDate);
+    const formattedDate = dateObject.toLocaleDateString('sv-SE', { year: 'numeric', month: '2-digit', day: '2-digit' });
+
     return (
         <div key={task._id}>
             {/* The button to open modal */}
@@ -19,8 +23,6 @@ export const ToDoCard = ({ task, categories, updateTask, setTaskTitle, setTaskMe
                     <button className="btn btn-square btn-ghost absolute top-0 right-0 h-16 w-16">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-5 h-5 stroke-current"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                     </button>
-                    <h1 className="text-2xl">{task.title}</h1>
-                    <h2>{task.message}</h2>
                     <div className="form-control w-full max-w-xs">
                         <label className="label">
                             <span className="label-text">Title</span>
@@ -43,9 +45,15 @@ export const ToDoCard = ({ task, categories, updateTask, setTaskTitle, setTaskMe
                             ))}
                         </select>
                     </div>
+                    <div className="form-control w-full max-w-xs">
+                        <label className="label">
+                            <span className="label-text">Due Date</span>
+                        </label>
+                        <input type="date" onChange={(e) => setTaskDueDate(e.target.value)} name="dueDate" placeholder="Type here" className="input input-bordered w-full max-w-xs" value={formattedDate} />
+                    </div>
                     <div className="modal-action">
+                        <a href="#" className="btn btn-sm" onClick={update}>Update Task</a>
                         <a href="#" className="btn btn-sm">Close</a>
-                        <a href="#" className="btn btn-block" onClick={update}>Update Task</a>
                     </div>
                 </div>
             </div>
