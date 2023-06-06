@@ -87,10 +87,16 @@ export const Main = () => {
                 if (data.success) {
                     dispatch(tasks.actions.setError(null));
                     dispatch(tasks.actions.setItems([...taskItems, data.response]));
+                    setTaskTitle('');
+                    setTaskMessage('');
+                    setTaskCategory(categories.length > 0 ? categories[0]._id : null);
+                    setTaskDueDate("");
+                    setTaskPriority(null);
                 } else {
                     dispatch(tasks.actions.setError(data.error));
                 }
             });
+
     };
     const addCategory = (e) => {
         const options = {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { user } from 'reducers/User';
 import { SideBarBtn } from './SideBarBtn';
 
@@ -19,6 +19,8 @@ export const TopBar = ({ addTask, categories, taskTitle, taskMessage, taskCatego
         setTaskPriority(event.target.value)
     };
 
+    const username = useSelector((store) => store.user.username);
+    const userInitials = Array.from(username)[0]
 
     const today = new Date();
     const formatToday = today.toLocaleDateString('sv-SE', { year: 'numeric', month: '2-digit', day: '2-digit' });
@@ -33,10 +35,10 @@ export const TopBar = ({ addTask, categories, taskTitle, taskMessage, taskCatego
             </div>
             <div className="flex-none gap-2">
                 <div className="form-control">
-                    <label htmlFor="my_modal_category" className="btn">+Add New Category</label>
+                    <a href="#my_modal_category" className="btn">+Add New Category</a>
                 </div>
                 <div className="form-control">
-                    <label htmlFor="my_modal_task" className="btn">+Add New Task</label>
+                    <a href="#my_modal_task" className="btn">+Add New Task</a>
                 </div>
                 <div className="dropdown dropdown-end">
                     <label tabIndex={0} className="btn btn-ghost btn-circle">
@@ -57,8 +59,8 @@ export const TopBar = ({ addTask, categories, taskTitle, taskMessage, taskCatego
                 <div className="dropdown dropdown-end">
                     <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
                         <div className="avatar placeholder">
-                            <div className="bg-neutral-focus text-neutral-content rounded-full w-8">
-                                <span className="text-xs">AA</span>
+                            <div className="bg-neutral-focus text-neutral-content rounded-full w-10">
+                                <span className="text-xs">{userInitials}</span>
                             </div>
                         </div>
 
@@ -69,13 +71,11 @@ export const TopBar = ({ addTask, categories, taskTitle, taskMessage, taskCatego
                                 Profile
                             </a>
                         </li>
-                        <li><a>Settings</a></li>
                         <li><a onClick={handleLogoutClick}>Logout</a></li>
                     </ul>
                 </div>
                 {/* start of new task modal */}
-                <input type="checkbox" id="my_modal_task" className="modal-toggle" />
-                <div className="modal">
+                <div id="my_modal_task" className="modal">
                     <div className="modal-box">
                         <div className="form-control w-full max-w-xs">
                             <label className="label">
@@ -118,14 +118,15 @@ export const TopBar = ({ addTask, categories, taskTitle, taskMessage, taskCatego
                             </label>
                             <input type="date" onChange={(e) => setTaskDueDate(e.target.value)} name="dueDate" placeholder="Type here" className="input input-bordered w-full max-w-xs" defaultValue={taskDueDate} />
                         </div>
-                        <button className="btn btn-block" onClick={addTask}>Add Task</button>
+                        <div className="modal-action">
+                            <a href="#" className="btn btn-sm">Close</a>
+                            <a href="#" className="btn btn-sm" onClick={addTask}>Add Task</a>
+                        </div>
                     </div>
-                    <label className="modal-backdrop" htmlFor="my_modal_task">Close</label>
                 </div>
                 {/* end of new task modal */}
                 {/*Start of new category modal */}
-                <input type="checkbox" id="my_modal_category" className="modal-toggle" />
-                <div className="modal">
+                <div className="modal" id="my_modal_category">
                     <div className="modal-box">
                         <div className="form-control w-full max-w-xs">
                             <label className="label">
@@ -133,7 +134,10 @@ export const TopBar = ({ addTask, categories, taskTitle, taskMessage, taskCatego
                             </label>
                             <input type="text" onChange={(e) => setCategoryTitle(e.target.value)} name="categoryTitle" placeholder="Type category title here" className="input input-bordered w-full max-w-xs" value={categoryTitle} />
                         </div>
-                        <button className="btn btn-block" onClick={addCategory}>Add Category</button>
+                        <div className="modal-action">
+                            <a href="#" className="btn btn-sm">Close</a>
+                            <a href="#" className="btn btn-sm" onClick={addCategory}>Add Category</a>
+                        </div>
                     </div>
                 </div>
             </div>
