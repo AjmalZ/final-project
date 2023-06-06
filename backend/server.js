@@ -126,12 +126,11 @@ const TaskSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  inactive: {
-    type: Boolean,
-    default: false
-  },
   dueDate: {
     type: Date,
+  },
+  priority: {
+    type: Number
   },
 });
 
@@ -143,10 +142,6 @@ const CategorySchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  inactive: {
-    type: Boolean,
-    default: false
-  }
 });
 
 // Create a Category model based on the Category schema
@@ -192,10 +187,10 @@ app.get("/tasks", async (req, res) => {
 // Define the route for creating a new task ("/tasks")
 app.post("/tasks", authenticateUser);
 app.post("/tasks", async (req, res) => {
-  const { title, message, category, dueDate } = req.body; // Extract the message from the request body
+  const { title, message, category, dueDate, priority } = req.body; // Extract the message from the request body
   const accessToken = req.header("Authorization"); // Extract the access token from the request header
   const user = await User.findOne({ accessToken: accessToken }); // Find the user associated with the access token
-  const task = await new Task({ category: category, title: title, message: message, dueDate: dueDate, user: user._id }).save(); // Create a new Task instance and save it to the database
+  const task = await new Task({ category: category, title: title, message: message, dueDate: dueDate, priority: priority, user: user._id }).save(); // Create a new Task instance and save it to the database
 
   res.status(200).json({ success: true, response: task });
 });
@@ -204,17 +199,17 @@ app.post("/tasks", async (req, res) => {
 // Define the route for updating a task ("/tasks")
 app.patch("/tasks", authenticateUser);
 app.patch("/tasks", async (req, res) => {
-  const { title, message, category, inactive, dueDate } = req.body; // Extract the message from the request body
+  const { title, message, category, dueDate, priority } = req.body; // Extract the message from the request body
   const accessToken = req.header("Authorization"); // Extract the access token from the request header
   const user = await User.findOne({ accessToken: accessToken }); // Find the user associated with the access token
-  const task = await new Task({ category: category, title: title, message: message, dueDate: dueDate, user: user._id, inactive: inactive }).save(); // Create a new Task instance and save it to the database
+  const task = await new Task({ category: category, title: title, message: message, dueDate: dueDate, priority: priority, user: user._id }).save(); // Create a new Task instance and save it to the database
 
   res.status(200).json({ success: true, response: task });
 });
 
 app.patch("/tasks/:taskId", authenticateUser);
 app.patch("/tasks/:taskId", async (req, res) => {
-  const { title, message, category, inactive, dueDate } = req.body; // Extract the updated task details from the request body
+  const { title, message, category, dueDate, priority } = req.body; // Extract the updated task details from the request body
   const { taskId } = req.params; // Extract the task ID from the request parameters
   const accessToken = req.header("Authorization"); // Extract the access token from the request header
 
@@ -227,8 +222,8 @@ app.patch("/tasks/:taskId", async (req, res) => {
       if (title) task.title = title;
       if (message) task.message = message;
       if (category) task.category = category;
-      if (inactive) task.inactive = inactive;
       if (dueDate) task.dueDate = dueDate;
+      if (priority) task.priority = priority;
       const updatedTask = await task.save(); // Save the updated task
 
       res.status(200).json({ success: true, response: updatedTask });
@@ -292,17 +287,17 @@ app.post("/category", async (req, res) => {
 // Define the route for updating a category ("/categories")
 app.patch("/category", authenticateUser);
 app.patch("/category", async (req, res) => {
-  const { title, inactive } = req.body; // Extract the message from the request body
+  const { title } = req.body; // Extract the message from the request body
   const accessToken = req.header("Authorization"); // Extract the access token from the request header
   const user = await User.findOne({ accessToken: accessToken }); // Find the user associated with the access token
-  const category = await new Category({ title: title, user: user._id, inactive: inactive }).save(); // Create a new Category instance and save it to the database
+  const category = await new Category({ title: title, user: user._id }).save(); // Create a new Category instance and save it to the database
 
   res.status(200).json({ success: true, response: category });
 });
 
 app.patch("/category/:categoryId", authenticateUser);
 app.patch("/category/:categoryId", async (req, res) => {
-  const { title, inactive } = req.body; // Extract the updated cate details from the request body
+  const { title } = req.body; // Extract the updated cate details from the request body
   const { categoryId } = req.params; // Extract the cate ID from the request parameters
   const accessToken = req.header("Authorization"); // Extract the access token from the request header
 
@@ -313,9 +308,6 @@ app.patch("/category/:categoryId", async (req, res) => {
     if (category) {
       // Update only the fields that are provided in the request body
       if (title) category.title = title;
-      if (inactive) {
-        category.inactive = inactive
-      } else { category.inactive = false }
 
       const updatedCategory = await category.save(); // Save the updated cate
 
@@ -331,6 +323,30 @@ app.patch("/category/:categoryId", async (req, res) => {
       success: false,
       response: e
     });
+  }
+});
+// Define the route for deleting a task ("/category/:categoryId")
+app.delete("/category/:categoryId", authenticateUser);
+app.delete("/category/:categoryId", async (req, res) => {
+  const { categoryId } = req.params; // Extract the task ID from the request parameters
+  const accessToken = req.header("Authorization"); // Extract the access token from the request header
+
+  try {
+    const user = await User.findOne({ accessToken: accessToken }); // Find the user associated with the access token
+    const category = await Category.findOne({ _id: categoryId, user: user._id }); // Find the category with the provided ID and associated with the user's ID
+    //const task = await Task.findOne({ _id: categoryId, user: user._id }); // Find the task with the provided ID and associated with the user's ID
+
+
+    if (category) {
+      await category.remove(); // Remove the category from the database
+      const tasks = await Task.find({ user: user._id, category: category._id });
+      tasks.map(task => task.remove());
+      res.status(200).json({ success: true, response: "Category deleted successfully" });
+    } else {
+      res.status(404).json({ success: false, response: "Category not found" });
+    }
+  } catch (e) {
+    res.status(500).json({ success: false, response: e });
   }
 });
 

@@ -6,7 +6,6 @@ import { category } from 'reducers/Category';
 import { API_URL } from 'utils/urls';
 import { user } from 'reducers/User';
 import { TopBar } from './TopBar';
-import { SideBar } from './SideBar';
 import { ToDoCard } from './ToDoCard';
 import './Main.css';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
@@ -25,8 +24,9 @@ export const Main = () => {
     const [taskCategory, setTaskCategory] = useState(categories.length > 0 ? categories[0]._id : null);
 
     const [categoryTitle, setCategoryTitle] = useState('');
-    const [categoryInactive, setCategoryInactive] = useState(false);
     const [taskDueDate, setTaskDueDate] = useState("");
+    const [taskPriority, setTaskPriority] = useState(null);
+
 
 
     useEffect(() => {
@@ -78,7 +78,7 @@ export const Main = () => {
                 'Content-Type': 'application/json',
                 Authorization: accessToken,
             },
-            body: JSON.stringify({ title: taskTitle, message: taskMessage, dueDate: taskDueDate, category: cat, user: user._id }),
+            body: JSON.stringify({ title: taskTitle, message: taskMessage, dueDate: taskDueDate, category: cat, priority: taskPriority, user: user._id }),
         };
 
         fetch(API_URL('tasks'), options)
@@ -120,7 +120,7 @@ export const Main = () => {
                 'Content-Type': 'application/json',
                 Authorization: accessToken,
             },
-            body: JSON.stringify({ title: taskTitle, message: taskMessage, duDate: taskDueDate, category: taskCategory }),
+            body: JSON.stringify({ title: taskTitle, message: taskMessage, duDate: taskDueDate, category: taskCategory, priority: taskPriority }),
         };
 
         fetch(API_URL(`tasks/${taskId}`), options)
@@ -137,14 +137,13 @@ export const Main = () => {
     };
 
     const updateCategory = (categoryId) => {
-        const inactive = categoryInactive === "on" ? true : false;
         const options = {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: accessToken,
             },
-            body: JSON.stringify({ title: categoryTitle, inactive: inactive }),
+            body: JSON.stringify({ title: categoryTitle }),
         };
         fetch(API_URL(`category/${categoryId}`), options)
             .then((res) => res.json())
@@ -162,14 +161,14 @@ export const Main = () => {
     };
 
     //This should be removed, use the one above
-    const updateTaskDropped = (taskId, title, message, cat, dueDate) => {
+    const updateTaskDropped = (taskId, title, message, cat, dueDate, priority) => {
         const options = {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: accessToken,
             },
-            body: JSON.stringify({ title: title, message: message, category: cat, duDate: dueDate }),
+            body: JSON.stringify({ title: title, message: message, category: cat, duDate: dueDate, priority: priority }),
         };
 
         fetch(API_URL(`tasks/${taskId}`), options)
@@ -237,6 +236,8 @@ export const Main = () => {
                 setTaskDueDate={setTaskDueDate}
                 taskDueDate={taskDueDate}
                 taskItems={taskItems}
+                taskPriority={taskPriority}
+                setTaskPriority={setTaskPriority}
             />
             <div>
                 {username ? <h1>Welcome {username.toUpperCase()}</h1> : ''}
@@ -253,7 +254,7 @@ export const Main = () => {
                                     {...provided.droppableProps}
                                 >
                                     <div className="flex justify-between items-center">
-                                        <CategoryColumn category={cat} updateCategory={updateCategory} setCategoryTitle={setCategoryTitle} setCategoryInactive={setCategoryInactive} />
+                                        <CategoryColumn cat={cat} updateCategory={updateCategory} setCategoryTitle={setCategoryTitle} accessToken={accessToken} categories={categories} category={category} />
                                     </div>
                                     {taskItems
                                         .filter((categoryTask) => categoryTask.category === cat._id)
@@ -266,9 +267,19 @@ export const Main = () => {
                                                         {...provided.dragHandleProps}
                                                     >
                                                         <div className="bg-white rounded-md mb-5 shadow-2xl">
-                                                            <label className="bg-gradient-to-r from-blue-500 to-blue px-2">
-                                                                Low priority
-                                                            </label>
+                                                            {task.priority === 1 ?
+                                                                <label className="bg-gradient-to-r from-blue-500 to-blue px-2">
+                                                                    Low priority
+                                                                </label>
+                                                                : task.priority === 2 ?
+                                                                    <label className="bg-gradient-to-r from-yellow-500 to-yellow px-2">
+                                                                        Medium priority
+                                                                    </label>
+                                                                    : task.priority === 3 ?
+                                                                        <label className="bg-gradient-to-r from-red-500 to-red px-2">
+                                                                            High priority
+                                                                        </label>
+                                                                        : ""}
                                                             <div className="text-gray-600 text-sm">
                                                                 <ToDoCard
                                                                     task={task}
@@ -278,6 +289,10 @@ export const Main = () => {
                                                                     setTaskMessage={setTaskMessage}
                                                                     setTaskCategory={setTaskCategory}
                                                                     setTaskDueDate={setTaskDueDate}
+                                                                    setTaskPriority={setTaskPriority}
+                                                                    accessToken={accessToken}
+                                                                    tasks={tasks}
+                                                                    taskItems={taskItems}
                                                                 />
                                                             </div>
                                                         </div>
@@ -295,7 +310,6 @@ export const Main = () => {
                 </DragDropContext>
 
             </div>
-            <SideBar />
         </>
     );
 };

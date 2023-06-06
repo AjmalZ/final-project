@@ -4,7 +4,7 @@ import { user } from 'reducers/User';
 import { SideBarBtn } from './SideBarBtn';
 
 
-export const TopBar = ({ addTask, categories, taskTitle, taskMessage, taskCategory, setTaskTitle, setTaskCategory, setTaskMessage, setCategoryTitle, categoryTitle, addCategory, taskDueDate, setTaskDueDate, taskItems }) => {
+export const TopBar = ({ addTask, categories, taskTitle, taskMessage, taskCategory, setTaskTitle, setTaskCategory, setTaskMessage, setCategoryTitle, categoryTitle, addCategory, taskDueDate, setTaskDueDate, taskItems, setTaskPriority, taskPriority }) => {
     const dispatch = useDispatch();
 
     const handleLogoutClick = () => {
@@ -15,6 +15,10 @@ export const TopBar = ({ addTask, categories, taskTitle, taskMessage, taskCatego
     const handleChange = (event) => {
         setTaskCategory(event.target.value)
     };
+    const handlePriorityChange = (event) => {
+        setTaskPriority(event.target.value)
+    };
+
 
     const today = new Date();
     const formatToday = today.toLocaleDateString('sv-SE', { year: 'numeric', month: '2-digit', day: '2-digit' });
@@ -94,6 +98,18 @@ export const TopBar = ({ addTask, categories, taskTitle, taskMessage, taskCatego
                                 {categories.map((cat) => (
                                     <option value={cat._id}>{cat.title}</option>
                                 ))}
+                            </select>
+                        </div>
+                        <div className="form-control w-full max-w-xs">
+                            <label className="label">
+                                <span className="label-text">Priority</span>
+                            </label>
+
+                            <select className="select select-bordered" onChange={handlePriorityChange} name="priority" value={taskPriority}>
+                                <option disabled={true} value="">Select Priority</option>
+                                <option value={1}>Low</option>
+                                <option value={2}>Medium</option>
+                                <option value={3}>High</option>
                             </select>
                         </div>
                         <div className="form-control w-full max-w-xs">
