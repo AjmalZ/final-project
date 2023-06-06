@@ -4,7 +4,7 @@ import { user } from 'reducers/User';
 import { SideBarBtn } from './SideBarBtn';
 
 
-export const TopBar = ({ addTask, categories, taskTitle, taskMessage, taskCategory, setTaskTitle, setTaskCategory, setTaskMessage }) => {
+export const TopBar = ({ addTask, categories, taskTitle, taskMessage, taskCategory, setTaskTitle, setTaskCategory, setTaskMessage, setCategoryTitle, categoryTitle, addCategory }) => {
     const dispatch = useDispatch();
 
     const handleLogoutClick = () => {
@@ -23,7 +23,10 @@ export const TopBar = ({ addTask, categories, taskTitle, taskMessage, taskCatego
             </div>
             <div className="flex-none gap-2">
                 <div className="form-control">
-                    <label htmlFor="my_modal_7" className="btn">+Add New Task</label>
+                    <label htmlFor="my_modal_category" className="btn">+Add New Category</label>
+                </div>
+                <div className="form-control">
+                    <label htmlFor="my_modal_task" className="btn">+Add New Task</label>
                 </div>
                 <div className="dropdown dropdown-end">
                     <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
@@ -44,22 +47,21 @@ export const TopBar = ({ addTask, categories, taskTitle, taskMessage, taskCatego
                         <li><a onClick={handleLogoutClick}>Logout</a></li>
                     </ul>
                 </div>
-
-                {/* Put this part before </body> tag */}
-                <input type="checkbox" id="my_modal_7" className="modal-toggle" />
+                {/* start of new task modal */}
+                <input type="checkbox" id="my_modal_task" className="modal-toggle" />
                 <div className="modal">
                     <div className="modal-box">
                         <div className="form-control w-full max-w-xs">
                             <label className="label">
                                 <span className="label-text">Title</span>
                             </label>
-                            <input type="text" onChange={(e) => setTaskTitle(e.target.value)} name="title" placeholder="Type here" className="input input-bordered w-full max-w-xs" value={taskTitle} />
+                            <input type="text" onChange={(e) => setTaskTitle(e.target.value)} name="title" placeholder="Type task title here" className="input input-bordered w-full max-w-xs" value={taskTitle} />
                         </div>
                         <div className="form-control w-full max-w-xs">
                             <label className="label">
                                 <span className="label-text">Message</span>
                             </label>
-                            <input type="text" onChange={(e) => setTaskMessage(e.target.value)} name="message" placeholder="Type here" className="input input-bordered w-full max-w-xs" value={taskMessage} />
+                            <input type="text" onChange={(e) => setTaskMessage(e.target.value)} name="message" placeholder="Type task message here" className="input input-bordered w-full max-w-xs" value={taskMessage} />
                         </div>
                         <div className="form-control w-full max-w-xs">
                             <label className="label">
@@ -72,10 +74,23 @@ export const TopBar = ({ addTask, categories, taskTitle, taskMessage, taskCatego
                                 ))}
                             </select>
                         </div>
-                        <button className="btn btn-block" onClick={addTask}>+Add New Task</button>
+                        <button className="btn btn-block" onClick={addTask}>Add Task</button>
                     </div>
-                    <label className="modal-backdrop" htmlFor="my_modal_7">Close</label>
-
+                    <label className="modal-backdrop" htmlFor="my_modal_task">Close</label>
+                </div>
+                {/* end of new task modal */}
+                {/*Start of new category modal */}
+                <input type="checkbox" id="my_modal_category" className="modal-toggle" />
+                <div className="modal">
+                    <div className="modal-box">
+                        <div className="form-control w-full max-w-xs">
+                            <label className="label">
+                                <span className="label-text">Title</span>
+                            </label>
+                            <input type="text" onChange={(e) => setCategoryTitle(e.target.value)} name="categoryTitle" placeholder="Type category title here" className="input input-bordered w-full max-w-xs" value={categoryTitle} />
+                        </div>
+                        <button className="btn btn-block" onClick={addCategory}>Add Category</button>
+                    </div>
                 </div>
             </div>
         </div>

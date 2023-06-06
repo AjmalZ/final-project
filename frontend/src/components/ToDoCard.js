@@ -45,7 +45,7 @@ export const ToDoCard = ({ task, categories, updateTask, setTaskTitle, setTaskMe
                     </div>
                     <div className="modal-action">
                         <a href="#" className="btn btn-sm">Close</a>
-                        <button className="btn btn-block" onClick={update}>Update Task</button>
+                        <a href="#" className="btn btn-block" onClick={update}>Update Task</a>
                     </div>
                 </div>
             </div>
