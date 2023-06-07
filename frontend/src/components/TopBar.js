@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { user } from 'reducers/User';
 import { SideBarBtn } from './SideBarBtn';
-
+import { ProfileModal } from './ProfileModal';
 
 export const TopBar = ({
     taskItems,
@@ -77,27 +77,7 @@ export const TopBar = ({
                 </div>
 
                 <div className="modal" id="my_modal_user_info">
-                    <div className="modal-box">
-                        <div className="form-control w-full max-w-xs">
-                            <h1 className="text-xl font-medium">Profile</h1>
-                            <label className="label">
-                                <span className="label-text">First Name</span>
-                            </label>
-                            <input type="text" onChange={(e) => setFirstName(e.target.value)} name="firstName" placeholder="Type First Name here" className="input input-bordered w-full max-w-xs" value={firstName} />
-                            <label className="label">
-                                <span className="label-text">Last Name</span>
-                            </label>
-                            <input type="text" onChange={(e) => setLastName(e.target.value)} name="lastName" placeholder="Type Last Name here" className="input input-bordered w-full max-w-xs" value={lastName} />
-                            <label className="label">
-                                <span className="label-text">Email Adress</span>
-                            </label>
-                            <input type="text" onChange={(e) => setEmail(e.target.value)} name="email" placeholder="Type Email Adress here" className="input input-bordered w-full max-w-xs" value={email} />
-                        </div>
-                        <div className="modal-action">
-                            <a href="#" className="btn btn-sm">Close</a>
-                            <a href="#" className="btn btn-sm" onClick={updateUser}>Update Profile</a>
-                        </div>
-                    </div>
+                    <ProfileModal firstName={firstName} setFirstName={setFirstName} lastName={lastName} setLastName={setLastName} email={email} setEmail={setEmail} updateUser={updateUser} />
                 </div>
             </div>
         </div>

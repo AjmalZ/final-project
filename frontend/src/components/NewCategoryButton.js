@@ -3,9 +3,6 @@ import React from "react";
 export const NewCategoryButton = ({ categoryTitle, setCategoryTitle, addCategory }) => {
     return (
         <div>
-            <div className="form-control">
-                <a href="#my_modal_category" className="btn">+Add New Category</a>
-            </div>
             <div className="modal" id="my_modal_category">
                 <div className="modal-box">
                     <div className="form-control w-full max-w-xs">

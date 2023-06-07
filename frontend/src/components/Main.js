@@ -284,102 +284,114 @@ export const Main = () => {
                 setEmail={setEmail}
                 updateUser={updateUser}
             />
-            <div className="mx-10">
-                <h2 className="my-4">
-                    {username ? <h1>Welcome {username.toUpperCase()}</h1> : ''}
-                </h2>
 
-                <div className="flex justify-between">
-                    <ButtonGroup filterByCategory={filterByCategory} setFilterByCategory={setFilterByCategory} />
-                    <div className="flex">
-                        <NewTaskButton
-                            addTask={addTask}
-                            categories={categories}
-                            taskTitle={taskTitle}
-                            taskMessage={taskMessage}
-                            taskCategory={taskCategory}
-                            setTaskTitle={setTaskTitle}
-                            setTaskCategory={setTaskCategory}
-                            setTaskMessage={setTaskMessage}
-                            taskDueDate={taskDueDate}
-                            setTaskDueDate={setTaskDueDate}
-                            setTaskPriority={setTaskPriority}
-                            taskPriority={taskPriority}
-                        />
-                        <NewCategoryButton categoryTitle={categoryTitle} setCategoryTitle={setCategoryTitle} addCategory={addCategory} />
+
+
+            <div className="drawer mainDrawer h-screen">
+                <input id="my-drawer" type="checkbox" className="drawer-toggle" />
+                <div className="drawer-content">
+                    <div className="mx-10">
+                        <h2 className="my-4">
+                            {username ? <h1>Welcome {username.toUpperCase()}</h1> : ''}
+                        </h2>
+                        <div className="flex gap-5 w-full justify-items-center kanban">
+                            <DragDropContext onDragEnd={onDragEnd}>
+                                {categories.map((cat) => (
+                                    <Droppable droppableId={cat._id} key={cat._id}>
+                                        {(provided, snapshot) => (
+                                            <div
+                                                ref={provided.innerRef}
+                                                style={{ backgroundColor: snapshot.isDraggingOver ? '#e7e7e4' : '#f5f5f4' }}
+                                                {...provided.droppableProps}
+                                                className="kanbanCategory h-screen"
+                                            >
+                                                <div>
+                                                    <CategoryColumn cat={cat} updateCategory={updateCategory} setCategoryTitle={setCategoryTitle} accessToken={accessToken} categories={categories} category={category} taskItems={taskItems} />
+                                                </div>
+                                                <div>
+                                                    {taskItems
+                                                        .filter((categoryTask) => (categoryTask.category === cat._id && filterByCategory.length === 0) || (categoryTask.category === cat._id && filterByCategory.length > 0 && filterByCategory.find(priorityFilter => priorityFilter === categoryTask.priority)))
+                                                        .map((task, index) => (
+
+                                                            <Draggable draggableId={task._id} index={index} key={task._id}>
+                                                                {(provided, snapshot) => (
+                                                                    <div
+                                                                        ref={provided.innerRef}
+                                                                        {...provided.draggableProps}
+                                                                        {...provided.dragHandleProps}
+                                                                    >
+                                                                        <div className="kanbanCard bg-white rounded-md mb-5 shadow-2xl">
+                                                                            {task.priority === 1 ?
+                                                                                <label className="bg-gradient-to-r from-blue-500 to-blue px-2 block">
+                                                                                    Low priority
+                                                                                </label>
+                                                                                : task.priority === 2 ?
+                                                                                    <label className="bg-gradient-to-r from-yellow-500 to-yellow px-2 block">
+                                                                                        Medium priority
+                                                                                    </label>
+                                                                                    : task.priority === 3 ?
+                                                                                        <label className="bg-gradient-to-r from-red-500 to-red px-2 block">
+                                                                                            High priority
+                                                                                        </label>
+                                                                                        : ""}
+                                                                            <div className="text-gray-600 text-sm">
+                                                                                <ToDoCard
+                                                                                    task={task}
+                                                                                    categories={categories}
+                                                                                    updateTask={updateTask}
+                                                                                    setTaskTitle={setTaskTitle}
+                                                                                    setTaskMessage={setTaskMessage}
+                                                                                    setTaskCategory={setTaskCategory}
+                                                                                    setTaskDueDate={setTaskDueDate}
+                                                                                    setTaskPriority={setTaskPriority}
+                                                                                    accessToken={accessToken}
+                                                                                    tasks={tasks}
+                                                                                    taskItems={taskItems}
+                                                                                />
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+                                                            </Draggable>
+                                                        ))}
+                                                </div>
+                                                {provided.placeholder}
+                                            </div>
+
+                                        )}
+                                    </Droppable>
+
+                                ))}
+                            </DragDropContext>
+
+                        </div>
                     </div>
-                </div>
-
-
-                <div className="flex space-x-10 mt-10 w-full kanban">
-                    <DragDropContext onDragEnd={onDragEnd}>
-                        {categories.map((cat) => (
-                            <Droppable droppableId={cat._id} key={cat._id}>
-                                {(provided, snapshot) => (
-                                    <div
-                                        ref={provided.innerRef}
-                                        style={{ backgroundColor: snapshot.isDraggingOver ? 'transparent' : 'transparent' }}
-                                        {...provided.droppableProps}
-                                        className="kanbanCategory"
-                                    >
-                                        <div>
-                                            <CategoryColumn cat={cat} updateCategory={updateCategory} setCategoryTitle={setCategoryTitle} accessToken={accessToken} categories={categories} category={category} taskItems={taskItems} />
-                                        </div>
-                                        {taskItems
-                                            .filter((categoryTask) => (categoryTask.category === cat._id && filterByCategory.length === 0) || (categoryTask.category === cat._id && filterByCategory.length > 0 && filterByCategory.find(priorityFilter => priorityFilter === categoryTask.priority)))
-                                            .map((task, index) => (
-
-                                                <Draggable draggableId={task._id} index={index} key={task._id}>
-                                                    {(provided, snapshot) => (
-                                                        <div
-                                                            ref={provided.innerRef}
-                                                            {...provided.draggableProps}
-                                                            {...provided.dragHandleProps}
-                                                        >
-                                                            <div className="kanbanCard bg-white rounded-md mb-5 shadow-2xl">
-                                                                {task.priority === 1 ?
-                                                                    <label className="bg-gradient-to-r from-blue-500 to-blue px-2 block">
-                                                                        Low priority
-                                                                    </label>
-                                                                    : task.priority === 2 ?
-                                                                        <label className="bg-gradient-to-r from-yellow-500 to-yellow px-2 block">
-                                                                            Medium priority
-                                                                        </label>
-                                                                        : task.priority === 3 ?
-                                                                            <label className="bg-gradient-to-r from-red-500 to-red px-2 block">
-                                                                                High priority
-                                                                            </label>
-                                                                            : ""}
-                                                                <div className="text-gray-600 text-sm">
-                                                                    <ToDoCard
-                                                                        task={task}
-                                                                        categories={categories}
-                                                                        updateTask={updateTask}
-                                                                        setTaskTitle={setTaskTitle}
-                                                                        setTaskMessage={setTaskMessage}
-                                                                        setTaskCategory={setTaskCategory}
-                                                                        setTaskDueDate={setTaskDueDate}
-                                                                        setTaskPriority={setTaskPriority}
-                                                                        accessToken={accessToken}
-                                                                        tasks={tasks}
-                                                                        taskItems={taskItems}
-                                                                    />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    )}
-                                                </Draggable>
-                                            ))}
-                                        {provided.placeholder}
-                                    </div>
-
-                                )}
-                            </Droppable>
-
-                        ))}
-                    </DragDropContext>
 
                 </div>
+                <div className="drawer-side">
+                    <label htmlFor="my-drawer" className="drawer-overlay"></label>
+                    <ul className="menu p-4 w-80 h-full bg-base-200 text-base-content">
+                        <li><ButtonGroup filterByCategory={filterByCategory} setFilterByCategory={setFilterByCategory} /></li>
+                        <li className="py-2"><a href="#my_modal_task" className="btn btn-sm py-2 text-white">+Add New Task</a></li>
+                        <li className="py-2"><a href="#my_modal_category" className="btn btn-sm py-2 text-white">+Add New Category</a></li>
+
+                    </ul>
+                </div>
+                <NewTaskButton
+                    addTask={addTask}
+                    categories={categories}
+                    taskTitle={taskTitle}
+                    taskMessage={taskMessage}
+                    taskCategory={taskCategory}
+                    setTaskTitle={setTaskTitle}
+                    setTaskCategory={setTaskCategory}
+                    setTaskMessage={setTaskMessage}
+                    taskDueDate={taskDueDate}
+                    setTaskDueDate={setTaskDueDate}
+                    setTaskPriority={setTaskPriority}
+                    taskPriority={taskPriority}
+                />
+                <NewCategoryButton categoryTitle={categoryTitle} setCategoryTitle={setCategoryTitle} addCategory={addCategory} />
             </div>
         </>
     );

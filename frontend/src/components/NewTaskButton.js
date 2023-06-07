@@ -7,9 +7,11 @@ export const NewTaskButton = ({
     taskMessage,
     taskCategory,
     setTaskTitle,
+    setTaskCategory,
     setTaskMessage,
     taskDueDate,
     setTaskDueDate,
+    setTaskPriority,
     taskPriority
 }) => {
     const handleChange = (event) => {
@@ -20,9 +22,6 @@ export const NewTaskButton = ({
     };
     return (
         <div>
-            <div className="form-control">
-                <a href="#my_modal_task" className="btn">+Add New Task</a>
-            </div>
             <div id="my_modal_task" className="modal">
                 <div className="modal-box">
                     <div className="form-control w-full max-w-xs">

@@ -12,24 +12,24 @@ export const ButtonGroup = ({ filterByCategory, setFilterByCategory }) => {
     };
 
     return (
-        <div className="flex justify-center ">
+        <div className="flex justify-center">
             <button
                 onClick={() => handleButtonClick(1)}
-                className={filterByCategory.includes(1) ? 'btn bg-blue-500 text-black' : 'btn btn-outline '}
+                className={filterByCategory.includes(1) ? 'btn btn-sm rounded-r-none bg-blue-500 text-black' : 'btn btn-sm rounded-r-none btn-outline '}
             >
-                Button 1
+                Low
             </button>
             <button
                 onClick={() => handleButtonClick(2)}
-                className={filterByCategory.includes(2) ? 'btn bg-yellow-500 text-black' : 'btn btn-outline '}
+                className={filterByCategory.includes(2) ? 'btn btn-sm rounded-none bg-yellow-500 text-black' : 'btn btn-sm rounded-none btn-outline '}
             >
-                Button 2
+                Medium
             </button>
             <button
                 onClick={() => handleButtonClick(3)}
-                className={filterByCategory.includes(3) ? 'btn bg-red-500 text-black' : 'btn btn-outline '}
+                className={filterByCategory.includes(3) ? 'btn btn-sm rounded-l-none bg-red-500 text-black' : 'btn btn-sm rounded-l-none btn-outline '}
             >
-                Button 3
+                High
             </button>
         </div>
     )
