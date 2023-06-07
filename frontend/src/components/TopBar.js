@@ -20,7 +20,7 @@ export const TopBar = ({ addTask, categories, taskTitle, taskMessage, taskCatego
     };
 
     const username = useSelector((store) => store.user.username);
-    const userInitials = Array.from(username)[0]
+    const userInitials = username ? Array.from(username)[0] : ''
 
     const today = new Date();
     const formatToday = today.toLocaleDateString('sv-SE', { year: 'numeric', month: '2-digit', day: '2-digit' });
