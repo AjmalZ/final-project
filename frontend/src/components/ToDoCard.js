@@ -85,7 +85,7 @@ export const ToDoCard = ({ task, categories, updateTask, setTaskTitle, setTaskMe
                         <label className="label">
                             <span className="label-text">Due Date</span>
                         </label>
-                        <input type="date" onChange={(e) => setTaskDueDate(e.target.value)} name="dueDate" placeholder="Type here" className="input input-bordered w-full max-w-xs" value={formattedDate} />
+                        <input type="date" onChange={(e) => setTaskDueDate(e.target.value)} name="dueDate" placeholder="Type here" className="input input-bordered w-full max-w-xs" defaultValue={formattedDate} />
                     </div>
                     <div className="modal-action">
                         <a href="#" className="btn btn-sm">Close</a>

@@ -80,7 +80,6 @@ export const Main = () => {
             .then((data) => {
                 if (data.success) {
                     dispatch(user.actions.setError(null));
-                    console.log(data.response);
                     setFirstName(data.response.firstName)
                     setLastName(data.response.lastName)
                     setEmail(data.response.email)
@@ -156,7 +155,6 @@ export const Main = () => {
             .then((data) => {
                 if (data.success) {
                     //dispatch(user.actions.setError(null));
-                    console.log(data)
                     //dispatch(category.actions.setItems([...tempCategories]));
                 } else {
                     dispatch(user.actions.setError(data.error));
@@ -196,7 +194,7 @@ export const Main = () => {
                 'Content-Type': 'application/json',
                 Authorization: accessToken,
             },
-            body: JSON.stringify({ title: taskTitle, message: taskMessage, duDate: taskDueDate, category: taskCategory, priority: taskPriority }),
+            body: JSON.stringify({ title: taskTitle, message: taskMessage, dueDate: taskDueDate, category: taskCategory, priority: taskPriority }),
         };
 
         fetch(API_URL(`tasks/${taskId}`), options)
