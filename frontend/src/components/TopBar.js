@@ -13,9 +13,6 @@ export const TopBar = ({
     setTaskTitle,
     setTaskCategory,
     setTaskMessage,
-    setCategoryTitle,
-    categoryTitle,
-    addCategory,
     taskDueDate,
     setTaskDueDate,
     taskItems,
@@ -60,9 +57,6 @@ export const TopBar = ({
                 <SideBarBtn />
             </div>
             <div className="flex-none gap-2">
-                <div className="form-control">
-                    <a href="#my_modal_category" className="btn">+Add New Category</a>
-                </div>
                 <div className="form-control">
                     <a href="#my_modal_task" className="btn">+Add New Task</a>
                 </div>
@@ -152,22 +146,6 @@ export const TopBar = ({
                     </div>
                 </div>
                 {/* end of new task modal */}
-                {/*Start of new category modal */}
-                <div className="modal" id="my_modal_category">
-                    <div className="modal-box">
-                        <div className="form-control w-full max-w-xs">
-                            <h1 className="text-xl font-medium">Add New Category</h1>
-                            <label className="label">
-                                <span className="label-text">Title</span>
-                            </label>
-                            <input type="text" onChange={(e) => setCategoryTitle(e.target.value)} name="categoryTitle" placeholder="Type category title here" className="input input-bordered w-full max-w-xs" value={categoryTitle} />
-                        </div>
-                        <div className="modal-action">
-                            <a href="#" className="btn btn-sm">Close</a>
-                            <a href="#" className="btn btn-sm" onClick={addCategory}>Add Category</a>
-                        </div>
-                    </div>
-                </div>
 
                 <div className="modal" id="my_modal_user_info">
                     <div className="modal-box">

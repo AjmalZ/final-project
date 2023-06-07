@@ -11,6 +11,7 @@ import './Main.css';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { CategoryColumn } from './CategoryColumn';
 import { ButtonGroup } from './ButtonGroup';
+import { NewCategoryButton } from './NewCategoryButton';
 
 export const Main = () => {
     const taskItems = useSelector((store) => store.tasks.items);
@@ -281,9 +282,6 @@ export const Main = () => {
                 setTaskTitle={setTaskTitle}
                 setTaskCategory={setTaskCategory}
                 setTaskMessage={setTaskMessage}
-                setCategoryTitle={setCategoryTitle}
-                categoryTitle={categoryTitle}
-                addCategory={addCategory}
                 setTaskDueDate={setTaskDueDate}
                 taskDueDate={taskDueDate}
                 taskItems={taskItems}
@@ -300,6 +298,7 @@ export const Main = () => {
             <div className="flex justify-center ">
                 {username ? <h1>Welcome {username.toUpperCase()}</h1> : ''}
             </div>
+            <NewCategoryButton categoryTitle={categoryTitle} setCategoryTitle={setCategoryTitle} addCategory={addCategory} />
 
             <ButtonGroup filterByCategory={filterByCategory} setFilterByCategory={setFilterByCategory} />
             <div className="flex justify-center space-x-20 items-center">
