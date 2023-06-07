@@ -35,6 +35,8 @@ export const TopBar = ({
         dispatch(user.actions.setAccessToken(null));
         dispatch(user.actions.setUsername(null));
         dispatch(user.actions.setUserId(null));
+        localStorage.removeItem('accessToken');
+        navigate('/login');
     };
     const handleChange = (event) => {
         setTaskCategory(event.target.value)

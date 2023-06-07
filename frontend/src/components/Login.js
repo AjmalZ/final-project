@@ -50,6 +50,9 @@ export const Login = () => {
                     dispatch(user.actions.setAccessToken(data.response.accessToken));
                     dispatch(user.actions.setUsername(data.response.username));
                     dispatch(user.actions.setUserId(data.response.id));
+                    localStorage.setItem('accessToken', data.response.accessToken);
+                    localStorage.setItem('username', data.response.username);
+                    localStorage.setItem('userId', data.response.id);
                     dispatch(user.actions.setError(null));
                     navigate("/"); // Redirect to home page
                 } else {

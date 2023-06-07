@@ -35,7 +35,12 @@ export const Main = () => {
 
     useEffect(() => {
         if (!accessToken) {
-            navigate('/login');
+            if (localStorage.getItem('accessToken')) {
+                dispatch(user.actions.setAccessToken(localStorage.getItem('accessToken')));
+                dispatch(user.actions.setUsername(localStorage.getItem('username')));
+                dispatch(user.actions.setUserId(localStorage.getItem('userId')));
+            } else
+                navigate('/login');
         }
     }, [accessToken]);
 
