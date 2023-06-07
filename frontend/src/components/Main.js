@@ -31,7 +31,7 @@ export const Main = () => {
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
 
-
+    const [filterByCategory, setFilterByCategory] = useState([])
 
     useEffect(() => {
         if (!accessToken) {
@@ -268,7 +268,13 @@ export const Main = () => {
 
         dispatch(tasks.actions.setItems(updatedTaskItems));
     };
-
+    const handleButtonClick = (value) => {
+        if (filterByCategory.includes(value)) {
+            setFilterByCategory(filterByCategory.filter((btn) => btn !== value));
+        } else {
+            setFilterByCategory([...filterByCategory, value]);
+        }
+    };
     return (
         <>
             <TopBar
@@ -296,11 +302,31 @@ export const Main = () => {
                 setEmail={setEmail}
                 updateUser={updateUser}
             />
-            <div>
+            <div className="flex justify-center ">
                 {username ? <h1>Welcome {username.toUpperCase()}</h1> : ''}
             </div>
-            <div className="flex justify-center space-x-20 items-center">
+            <div className="flex justify-center ">
+                <button
+                    onClick={() => handleButtonClick(1)}
+                    className={filterByCategory.includes(1) ? 'btn bg-blue-500 text-black' : 'btn btn-outline '}
+                >
+                    Button 1
+                </button>
+                <button
+                    onClick={() => handleButtonClick(2)}
+                    className={filterByCategory.includes(2) ? 'btn bg-yellow-500 text-black' : 'btn btn-outline '}
+                >
+                    Button 2
+                </button>
+                <button
+                    onClick={() => handleButtonClick(3)}
+                    className={filterByCategory.includes(3) ? 'btn bg-red-500 text-black' : 'btn btn-outline '}
+                >
+                    Button 3
+                </button>
+            </div>
 
+            <div className="flex justify-center space-x-20 items-center">
                 <DragDropContext onDragEnd={onDragEnd}>
                     {categories.map((cat) => (
                         <Droppable droppableId={cat._id} key={cat._id}>
@@ -314,8 +340,9 @@ export const Main = () => {
                                         <CategoryColumn cat={cat} updateCategory={updateCategory} setCategoryTitle={setCategoryTitle} accessToken={accessToken} categories={categories} category={category} />
                                     </div>
                                     {taskItems
-                                        .filter((categoryTask) => categoryTask.category === cat._id)
+                                        .filter((categoryTask) => (categoryTask.category === cat._id && filterByCategory.length === 0) || (categoryTask.category === cat._id && filterByCategory.length > 0 && filterByCategory.find(priorityFilter => priorityFilter === categoryTask.priority)))
                                         .map((task, index) => (
+
                                             <Draggable draggableId={task._id} index={index} key={task._id}>
                                                 {(provided, snapshot) => (
                                                     <div

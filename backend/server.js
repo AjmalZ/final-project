@@ -139,7 +139,7 @@ const TaskSchema = new mongoose.Schema({
     type: Date,
   },
   priority: {
-    type: Number
+    type: Number,
   },
 });
 
