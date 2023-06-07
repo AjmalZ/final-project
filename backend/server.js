@@ -40,7 +40,16 @@ const UserSchema = new mongoose.Schema({
   accessToken: {
     type: String,
     default: () => crypto.randomBytes(128).toString("hex") // Generate a random access token using the Crypto module
-  }
+  },
+  firstName: {
+    type: String
+  },
+  lastName: {
+    type: String
+  },
+  email: {
+    type: String
+  },
 });
 
 // Create a User model based on the User schema
@@ -143,7 +152,6 @@ const CategorySchema = new mongoose.Schema({
     required: true
   },
 });
-
 // Create a Category model based on the Category schema
 const Category = mongoose.model("Category", CategorySchema);
 
@@ -187,18 +195,6 @@ app.get("/tasks", async (req, res) => {
 // Define the route for creating a new task ("/tasks")
 app.post("/tasks", authenticateUser);
 app.post("/tasks", async (req, res) => {
-  const { title, message, category, dueDate, priority } = req.body; // Extract the message from the request body
-  const accessToken = req.header("Authorization"); // Extract the access token from the request header
-  const user = await User.findOne({ accessToken: accessToken }); // Find the user associated with the access token
-  const task = await new Task({ category: category, title: title, message: message, dueDate: dueDate, priority: priority, user: user._id }).save(); // Create a new Task instance and save it to the database
-
-  res.status(200).json({ success: true, response: task });
-});
-
-
-// Define the route for updating a task ("/tasks")
-app.patch("/tasks", authenticateUser);
-app.patch("/tasks", async (req, res) => {
   const { title, message, category, dueDate, priority } = req.body; // Extract the message from the request body
   const accessToken = req.header("Authorization"); // Extract the access token from the request header
   const user = await User.findOne({ accessToken: accessToken }); // Find the user associated with the access token
@@ -284,26 +280,15 @@ app.post("/category", async (req, res) => {
   res.status(200).json({ success: true, response: category });
 });
 
-// Define the route for updating a category ("/categories")
-app.patch("/category", authenticateUser);
-app.patch("/category", async (req, res) => {
-  const { title } = req.body; // Extract the message from the request body
-  const accessToken = req.header("Authorization"); // Extract the access token from the request header
-  const user = await User.findOne({ accessToken: accessToken }); // Find the user associated with the access token
-  const category = await new Category({ title: title, user: user._id }).save(); // Create a new Category instance and save it to the database
-
-  res.status(200).json({ success: true, response: category });
-});
-
 app.patch("/category/:categoryId", authenticateUser);
 app.patch("/category/:categoryId", async (req, res) => {
-  const { title } = req.body; // Extract the updated cate details from the request body
-  const { categoryId } = req.params; // Extract the cate ID from the request parameters
+  const { title } = req.body; // Extract the updated category details from the request body
+  const { categoryId } = req.params; // Extract the category ID from the request parameters
   const accessToken = req.header("Authorization"); // Extract the access token from the request header
 
   try {
     const user = await User.findOne({ accessToken: accessToken }); // Find the user associated with the access token
-    const category = await Category.findOne({ _id: categoryId, user: user._id }); // Find the cate with the provided ID and associated with the user's ID
+    const category = await Category.findOne({ _id: categoryId, user: user._id }); // Find the category with the provided ID and associated with the user's ID
 
     if (category) {
       // Update only the fields that are provided in the request body
@@ -325,6 +310,7 @@ app.patch("/category/:categoryId", async (req, res) => {
     });
   }
 });
+
 // Define the route for deleting a task ("/category/:categoryId")
 app.delete("/category/:categoryId", authenticateUser);
 app.delete("/category/:categoryId", async (req, res) => {
@@ -347,6 +333,45 @@ app.delete("/category/:categoryId", async (req, res) => {
     }
   } catch (e) {
     res.status(500).json({ success: false, response: e });
+  }
+});
+// Define the route for fetching user ("/user")
+app.get("/user", authenticateUser);
+app.get("/user", async (req, res) => {
+  const accessToken = req.header("Authorization"); // Extract the access token from the request header
+  const user = await User.findOne({ accessToken: accessToken }); // Find the user associated with the access token
+
+  res.status(200).json({ success: true, response: user });
+});
+
+
+app.patch("/user/:userId", authenticateUser);
+app.patch("/user/:userId", async (req, res) => {
+  const { firstName, lastName, email } = req.body; // Extract the updated cate details from the request body
+  const accessToken = req.header("Authorization"); // Extract the access token from the request header
+
+  try {
+    const user = await User.findOne({ accessToken: accessToken }); // Find the user associated with the access token
+    if (user) {
+      // Update only the fields that are provided in the request body
+      if (firstName) user.firstName = firstName;
+      if (lastName) user.lastName = lastName;
+      if (email) user.email = email;
+
+      const updatedUser = await user.save(); // Save the updated cate
+
+      res.status(200).json({ success: true, response: updatedUser });
+    } else {
+      res.status(404).json({
+        success: false,
+        response: "user not found"
+      });
+    }
+  } catch (e) {
+    res.status(500).json({
+      success: false,
+      response: e
+    });
   }
 });
 

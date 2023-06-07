@@ -27,6 +27,10 @@ export const Main = () => {
     const [taskDueDate, setTaskDueDate] = useState("");
     const [taskPriority, setTaskPriority] = useState(null);
 
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+
 
 
     useEffect(() => {
@@ -62,10 +66,28 @@ export const Main = () => {
             .then((data) => {
                 if (data.success) {
                     dispatch(category.actions.setError(null));
+
                     dispatch(category.actions.setItems(data.response));
+
                 } else {
                     dispatch(category.actions.setError(data.error));
                     dispatch(category.actions.setItems([]));
+                }
+            });
+
+        fetch(API_URL('user'), options)
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.success) {
+                    dispatch(user.actions.setError(null));
+                    console.log(data.response);
+                    setFirstName(data.response.firstName)
+                    setLastName(data.response.lastName)
+                    setEmail(data.response.email)
+                    dispatch(user.actions.setItem(data.response));
+                } else {
+                    dispatch(user.actions.setError(data.error));
+                    dispatch(user.actions.setItem(null));
                 }
             });
     }, [accessToken, dispatch]);
@@ -119,28 +141,29 @@ export const Main = () => {
             });
     };
 
-    const updateTask = (taskId) => {
+
+    const updateUser = (userId) => {
         const options = {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: accessToken,
             },
-            body: JSON.stringify({ title: taskTitle, message: taskMessage, duDate: taskDueDate, category: taskCategory, priority: taskPriority }),
+            body: JSON.stringify({ firstName: firstName, lastName: lastName, email: email }),
         };
-
-        fetch(API_URL(`tasks/${taskId}`), options)
+        fetch(API_URL(`user/${userId}`), options)
             .then((res) => res.json())
             .then((data) => {
                 if (data.success) {
-                    let taskItemsWithoutTask = taskItems.filter((item) => item._id !== taskId);
-                    dispatch(tasks.actions.setError(null));
-                    dispatch(tasks.actions.setItems([...taskItemsWithoutTask, data.response]));
+                    //dispatch(user.actions.setError(null));
+                    console.log(data)
+                    //dispatch(category.actions.setItems([...tempCategories]));
                 } else {
-                    dispatch(tasks.actions.setError(data.error));
+                    dispatch(user.actions.setError(data.error));
                 }
             });
     };
+
 
     const updateCategory = (categoryId) => {
         const options = {
@@ -162,6 +185,29 @@ export const Main = () => {
                     dispatch(category.actions.setItems([...tempCategories]));
                 } else {
                     dispatch(category.actions.setError(data.error));
+                }
+            });
+    };
+
+    const updateTask = (taskId) => {
+        const options = {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: accessToken,
+            },
+            body: JSON.stringify({ title: taskTitle, message: taskMessage, duDate: taskDueDate, category: taskCategory, priority: taskPriority }),
+        };
+
+        fetch(API_URL(`tasks/${taskId}`), options)
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.success) {
+                    let taskItemsWithoutTask = taskItems.filter((item) => item._id !== taskId);
+                    dispatch(tasks.actions.setError(null));
+                    dispatch(tasks.actions.setItems([...taskItemsWithoutTask, data.response]));
+                } else {
+                    dispatch(tasks.actions.setError(data.error));
                 }
             });
     };
@@ -190,11 +236,6 @@ export const Main = () => {
             });
     };
 
-    /*const setTaskFields = (task, catId) => {
-        setTaskTitle(task.title);
-        setTaskMessage(task.message);
-        setTaskCategory(catId);
-    }*/
 
     const onDragEnd = (result) => {
         const { source, destination } = result;
@@ -244,6 +285,13 @@ export const Main = () => {
                 taskItems={taskItems}
                 taskPriority={taskPriority}
                 setTaskPriority={setTaskPriority}
+                firstName={firstName}
+                lastName={lastName}
+                setFirstName={setFirstName}
+                setLastName={setLastName}
+                email={email}
+                setEmail={setEmail}
+                updateUser={updateUser}
             />
             <div>
                 {username ? <h1>Welcome {username.toUpperCase()}</h1> : ''}

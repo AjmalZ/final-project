@@ -6,7 +6,7 @@ export const user = createSlice({
         username: null, // Initialize the username to null
         userId: null, // Initialize the userId to null
         accessToken: null, // Initialize the accessToken to null
-        error: null // Initialize the error to null
+        error: null, // Initialize the error to null
     },
     reducers: {
         setUsername: (store, action) => { // Define a reducer function named setUsername
@@ -20,6 +20,6 @@ export const user = createSlice({
         },
         setError: (store, action) => { // Define a reducer function named setError
             store.error = action.payload // Update the error state with the payload value from the action
-        }
+        },
     }
 });

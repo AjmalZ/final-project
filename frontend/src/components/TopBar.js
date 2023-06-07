@@ -4,7 +4,31 @@ import { user } from 'reducers/User';
 import { SideBarBtn } from './SideBarBtn';
 
 
-export const TopBar = ({ addTask, categories, taskTitle, taskMessage, taskCategory, setTaskTitle, setTaskCategory, setTaskMessage, setCategoryTitle, categoryTitle, addCategory, taskDueDate, setTaskDueDate, taskItems, setTaskPriority, taskPriority }) => {
+export const TopBar = ({
+    addTask,
+    categories,
+    taskTitle,
+    taskMessage,
+    taskCategory,
+    setTaskTitle,
+    setTaskCategory,
+    setTaskMessage,
+    setCategoryTitle,
+    categoryTitle,
+    addCategory,
+    taskDueDate,
+    setTaskDueDate,
+    taskItems,
+    setTaskPriority,
+    taskPriority,
+    firstName,
+    setFirstName,
+    lastName,
+    setLastName,
+    email,
+    setEmail,
+    updateUser
+}) => {
     const dispatch = useDispatch();
 
     const handleLogoutClick = () => {
@@ -51,7 +75,7 @@ export const TopBar = ({ addTask, categories, taskTitle, taskMessage, taskCatego
                     <div tabIndex={0} className="dropdown-content card card-compact w-64 p-2 shadow bg-primary text-primary-content">
                         <div className="card-body">
                             <h3 className="card-title">Tasks Overdue!</h3>
-                            {overdue.map((item, index) => (<p>{item.title}</p>))}
+                            {overdue.map((item, index) => (<p>• {item.title}</p>))}
 
                         </div>
                     </div>
@@ -67,7 +91,7 @@ export const TopBar = ({ addTask, categories, taskTitle, taskMessage, taskCatego
                     </label>
                     <ul tabIndex={0} className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52">
                         <li>
-                            <a className="justify-between">
+                            <a href="#my_modal_user_info" className="justify-between">
                                 Profile
                             </a>
                         </li>
@@ -78,6 +102,7 @@ export const TopBar = ({ addTask, categories, taskTitle, taskMessage, taskCatego
                 <div id="my_modal_task" className="modal">
                     <div className="modal-box">
                         <div className="form-control w-full max-w-xs">
+                            <h1 className="text-xl font-medium">Add New Task</h1>
                             <label className="label">
                                 <span className="label-text">Title</span>
                             </label>
@@ -129,6 +154,7 @@ export const TopBar = ({ addTask, categories, taskTitle, taskMessage, taskCatego
                 <div className="modal" id="my_modal_category">
                     <div className="modal-box">
                         <div className="form-control w-full max-w-xs">
+                            <h1 className="text-xl font-medium">Add New Category</h1>
                             <label className="label">
                                 <span className="label-text">Title</span>
                             </label>
@@ -137,6 +163,30 @@ export const TopBar = ({ addTask, categories, taskTitle, taskMessage, taskCatego
                         <div className="modal-action">
                             <a href="#" className="btn btn-sm">Close</a>
                             <a href="#" className="btn btn-sm" onClick={addCategory}>Add Category</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="modal" id="my_modal_user_info">
+                    <div className="modal-box">
+                        <div className="form-control w-full max-w-xs">
+                            <h1 className="text-xl font-medium">Profile</h1>
+                            <label className="label">
+                                <span className="label-text">First Name</span>
+                            </label>
+                            <input type="text" onChange={(e) => setFirstName(e.target.value)} name="firstName" placeholder="Type First Name here" className="input input-bordered w-full max-w-xs" value={firstName} />
+                            <label className="label">
+                                <span className="label-text">Last Name</span>
+                            </label>
+                            <input type="text" onChange={(e) => setLastName(e.target.value)} name="lastName" placeholder="Type Last Name here" className="input input-bordered w-full max-w-xs" value={lastName} />
+                            <label className="label">
+                                <span className="label-text">Email Adress</span>
+                            </label>
+                            <input type="text" onChange={(e) => setEmail(e.target.value)} name="email" placeholder="Type Email Adress here" className="input input-bordered w-full max-w-xs" value={email} />
+                        </div>
+                        <div className="modal-action">
+                            <a href="#" className="btn btn-sm">Close</a>
+                            <a href="#" className="btn btn-sm" onClick={updateUser}>Update Profile</a>
                         </div>
                     </div>
                 </div>
