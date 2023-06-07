@@ -2,7 +2,7 @@ import React from 'react';
 import { API_URL } from 'utils/urls';
 import { useDispatch } from 'react-redux';
 
-export const CategoryColumn = ({ cat, updateCategory, setCategoryTitle, categories, accessToken, category }) => {
+export const CategoryColumn = ({ cat, updateCategory, setCategoryTitle, categories, accessToken, category, taskItems }) => {
     const dispatch = useDispatch();
     const update = (event) => {
         updateCategory(cat._id)
@@ -26,10 +26,20 @@ export const CategoryColumn = ({ cat, updateCategory, setCategoryTitle, categori
                 }
             });
     };
+    const filteredTasks = taskItems.filter(item => item.category === cat._id);
     return (
         <div key={cat._id}>
             {/* The button to open modal */}
-            <a href={"#" + cat._id}><h1 className="text-xl ">{cat.title}</h1><svg class="h-8 w-8 text-black" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z" />  <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />  <line x1="13.5" y1="6.5" x2="17.5" y2="10.5" /></svg></a>
+            <div className="flex justify-between items-center">
+                <a href={"#" + cat._id} className="flex w-full">
+                    <h1 className="text-xl w-fit">{cat.title}</h1>
+                    <svg class="h-6 w-6 mt-1 ml-2 text-black" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z" />  <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />  <line x1="13.5" y1="6.5" x2="17.5" y2="10.5" /></svg>
+
+                </a>
+                <div>
+                    ({filteredTasks.length})
+                </div>
+            </div>
             <div className="modal" id={cat._id}>
                 <div className="modal-box">
                     <div className="form-control w-full max-w-xs">

@@ -44,7 +44,11 @@ export const ToDoCard = ({ task, categories, updateTask, setTaskTitle, setTaskMe
     return (
         <div key={task._id}>
             {/* The button to open modal */}
-            <a href={"#" + task._id}><h1 className="text-xl ">{task.title}</h1><h2 className="text-xl ">{task.message}</h2><p> {task.dueDate ? formattedDate : ""}</p></a>
+            <a href={"#" + task._id}>
+                <h1 className="text-base font-semibold ">{task.title}</h1>
+                <h2 className="text-xs text-neutral-500">{task.message}</h2>
+                <p> {task.dueDate ? formattedDate : ""}</p>
+            </a>
             <div className="modal" id={task._id}>
                 <div className="modal-box">
                     <div className="form-control w-full max-w-xs">
