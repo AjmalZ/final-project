@@ -3,6 +3,13 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
+  background-image: url(https://lh4.googleusercontent.com/-XplyTa1Za-I/VMSgIyAYkHI/AAAAAAAADxM/oL-rD6VP4ts/w1184-h666/Android-Lollipop-wallpapers-Google-Now-Wallpaper-2.png);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  font-family: 'Roboto', sans-serif;
+  overflow: hidden;
 }
 
 .main {
@@ -45,4 +52,3 @@
 .submitBtn:hover {
   background: #45a049;
 }
-

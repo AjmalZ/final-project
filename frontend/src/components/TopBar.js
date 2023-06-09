@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { user } from 'reducers/User';
 import { SideBarBtn } from './SideBarBtn';
 import { ProfileModal } from './ProfileModal';
+import logo from '../logo/logo.png';
 
 export const TopBar = ({
     taskItems,
@@ -36,15 +37,15 @@ export const TopBar = ({
 
     return (
         <div className="navbar bg-base-300">
-            <div className="flex-1">
+            <div className="flex-1 gap-6">
                 <SideBarBtn />
+                <img className="headerLogo w-1/6" src={logo} alt="header logo" />
             </div>
             <div className="flex-none gap-2">
-
                 <div className="dropdown dropdown-end">
-                    <label tabIndex={0} className="btn btn-ghost btn-circle">
+                    <label tabIndex={0} className="btn  btn-ghost btn-circle mr-4">
                         <div className="indicator">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
                             <span className="badge badge-xs badge-primary indicator-item">{overdueLength}</span>
                         </div>
                     </label>
@@ -60,7 +61,7 @@ export const TopBar = ({
                 <div className="dropdown dropdown-end">
                     <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
                         <div className="avatar placeholder">
-                            <div className="bg-neutral-focus text-neutral-content rounded-full w-10">
+                            <div className="bg-neutral-focus text-neutral-content rounded-full w-11">
                                 <span className="text-xs">{userInitials}</span>
                             </div>
                         </div>
