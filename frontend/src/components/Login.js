@@ -115,10 +115,11 @@ export const Login = () => {
     return (
         <div className="loginContainer">
             <div className="main">
-                {/* Login form */}
+                <input type="checkbox" id="chk" aria-hidden="true" />
+
                 <div className="login">
                     <form className="form" onSubmit={onLoginFormSubmit}>
-
+                        <label className="signUpLabel" htmlFor="chk" aria-hidden="true">Login</label>
                         <input
                             className="input"
                             type="text"
@@ -139,15 +140,15 @@ export const Login = () => {
                             onChange={(event) => setLoginPassword(event.target.value)}
                             required
                         />
-                        <button className="submitBtn" type="submit" value="Sign In" onClick={handleLoginButtonClick}>
-                            Sign In
+                        <button className="submitBtn" type="submit" value="Register" onClick={handleLoginButtonClick}>
+                            Login
                         </button>
                     </form>
                 </div>
 
-                {/* Registration form */}
-                <div className="register">
+                <div className="signup">
                     <form className="form" onSubmit={onRegisterFormSubmit}>
+                        <label className="signUpLabel" htmlFor="chk" aria-hidden="true">Register</label>
                         <input
                             className="input"
                             type="text"
@@ -168,12 +169,13 @@ export const Login = () => {
                             onChange={(event) => setRegisterPassword(event.target.value)}
                             required
                         />
-                        <button className="submitBtn" type="submit" value="Register" onClick={handleRegisterButtonClick}>
+                        <button className="submitBtn" type="submit" value="Sign In" onClick={handleRegisterButtonClick}>
                             Register
                         </button>
                     </form>
                 </div>
             </div>
+
         </div>
     );
 
