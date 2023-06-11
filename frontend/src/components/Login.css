@@ -37,7 +37,6 @@
   display: flex;
   margin: 60px;
   font-weight: bold;
-  cursor: pointer;
   transition: .5s ease-in-out;
 }
 
@@ -69,7 +68,6 @@ input {
   border: none;
   border-radius: 5px;
   transition: .2s ease-in;
-  cursor: pointer;
 }
 
 button:hover {
