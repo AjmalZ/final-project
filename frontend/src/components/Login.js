@@ -140,7 +140,7 @@ export const Login = () => {
                             onChange={(event) => setLoginPassword(event.target.value)}
                             required
                         />
-                        <button className="submitBtn" type="submit" value="Register" onClick={handleLoginButtonClick}>
+                        <button className="submitBtn" type="submit" value="register" onClick={handleLoginButtonClick}>
                             Login
                         </button>
                     </form>
@@ -169,7 +169,7 @@ export const Login = () => {
                             onChange={(event) => setRegisterPassword(event.target.value)}
                             required
                         />
-                        <button className="submitBtn" type="submit" value="Sign In" onClick={handleRegisterButtonClick}>
+                        <button className="submitBtn" type="submit" value="login" onClick={handleRegisterButtonClick}>
                             Register
                         </button>
                     </form>
