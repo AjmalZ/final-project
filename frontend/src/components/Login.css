@@ -41,6 +41,7 @@
   transition: .5s ease-in-out;
 }
 
+
 input {
   width: 60%;
   height: 20px;
@@ -49,8 +50,6 @@ input {
   display: flex;
   margin: 20px auto;
   padding: 10px;
-  border: none;
-  outline: none;
   border-radius: 5px;
 }
 

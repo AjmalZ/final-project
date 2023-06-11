@@ -22,7 +22,6 @@ export const TopBar = ({
         dispatch(user.actions.setUsername(null));
         dispatch(user.actions.setUserId(null));
         localStorage.removeItem('accessToken');
-        navigate('/login');
     };
 
 

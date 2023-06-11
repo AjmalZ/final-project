@@ -274,7 +274,7 @@ export const Main = () => {
     };
 
     return (
-        <>
+        <div className="mainContainer">
             <TopBar
                 taskItems={taskItems}
                 firstName={firstName}
@@ -293,7 +293,7 @@ export const Main = () => {
                 <div className="drawer-content">
                     <div className="mx-10">
                         <h2 className="my-4">
-                            {username ? <p className="text-xl font-medium">Welcome {username.toUpperCase()}</p> : ''}
+                            {username ? <p className="text-xl font-medium text-black">Welcome {username.toUpperCase()}</p> : ''}
                         </h2>
                         <div className="flex gap-5 w-full justify-items-center kanban">
                             <DragDropContext onDragEnd={onDragEnd}>
@@ -393,8 +393,9 @@ export const Main = () => {
                     taskPriority={taskPriority}
                 />
                 <NewCategoryButton categoryTitle={categoryTitle} setCategoryTitle={setCategoryTitle} addCategory={addCategory} />
+
             </div>
             <Footer />
-        </>
+        </div>
     );
 };

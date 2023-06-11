@@ -74,10 +74,11 @@ app.post("/register", async (req, res) => {
         accessToken: newUser.accessToken
       }
     });
+
   } catch (e) {
     res.status(400).json({
       success: false,
-      response: e
+      response: "Username already exists."
     });
   }
 });
@@ -102,7 +103,7 @@ app.post("/login", async (req, res) => {
     } else {
       res.status(400).json({
         success: false,
-        response: "Credentials do not match"
+        response: "Incorrect username or password."
       });
     }
   } catch (e) {

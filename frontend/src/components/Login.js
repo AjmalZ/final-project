@@ -12,6 +12,8 @@ export const Login = () => {
     const [registerUsername, setRegisterUsername] = useState("");
     const [registerPassword, setRegisterPassword] = useState("");
     const [mode, setMode] = useState("login");
+    const [loginErrorMessage, setloginErrorMessage] = useState("");
+    const [registerErrorMessage, setregisterErrorMessage] = useState("");
 
     // Redux hooks
     const dispatch = useDispatch();
@@ -61,6 +63,8 @@ export const Login = () => {
                     dispatch(user.actions.setUsername(null));
                     dispatch(user.actions.setUserId(null));
                     dispatch(user.actions.setError(data.response));
+                    setloginErrorMessage(data.response);
+
                 }
             });
     };
@@ -98,6 +102,8 @@ export const Login = () => {
                     dispatch(user.actions.setUsername(null));
                     dispatch(user.actions.setUserId(null));
                     dispatch(user.actions.setError(data.response));
+                    setregisterErrorMessage(data.response)
+
                 }
             });
     };
@@ -111,6 +117,7 @@ export const Login = () => {
     const handleRegisterButtonClick = () => {
         setMode("register");
     };
+
 
     return (
         <div className="loginContainer">
@@ -143,6 +150,10 @@ export const Login = () => {
                         <button className="submitBtn" type="submit" value="Sign In" onClick={handleLoginButtonClick}>
                             Login
                         </button>
+                        {loginErrorMessage && <div className="alert alert-warning justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                            <p>{loginErrorMessage}</p>
+                        </div>}
                     </form>
                 </div>
 
@@ -172,6 +183,10 @@ export const Login = () => {
                         <button className="submitBtn" type="submit" value="Register" onClick={handleRegisterButtonClick}>
                             Register
                         </button>
+                        {registerErrorMessage && <div className="alert alert-warning justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                            <p>{registerErrorMessage}</p>
+                        </div>}
                     </form>
                 </div>
             </div>
