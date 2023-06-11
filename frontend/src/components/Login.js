@@ -104,6 +104,7 @@ export const Login = () => {
 
     // Handle login button click
     const handleLoginButtonClick = () => {
+        console.log("LOGIN BUTTON CLICKED!");
         setMode("login");
     };
 
@@ -140,12 +141,11 @@ export const Login = () => {
                             onChange={(event) => setLoginPassword(event.target.value)}
                             required
                         />
-                        <button className="submitBtn" type="submit" value="login" onClick={handleLoginButtonClick}>
+                        <button className="submitBtn" type="submit" onClick={handleLoginButtonClick}>
                             Login
                         </button>
                     </form>
                 </div>
-
                 <div className="signup">
                     <form className="form" onSubmit={onRegisterFormSubmit}>
                         <label className="signUpLabel" htmlFor="chk" aria-hidden="true">Register</label>
@@ -169,7 +169,7 @@ export const Login = () => {
                             onChange={(event) => setRegisterPassword(event.target.value)}
                             required
                         />
-                        <button className="submitBtn" type="submit" value="register" onClick={handleRegisterButtonClick}>
+                        <button className="submitBtn" type="submit" onClick={handleRegisterButtonClick}>
                             Register
                         </button>
                     </form>
