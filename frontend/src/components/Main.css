@@ -19,5 +19,24 @@
   background-size: cover;
   background-repeat: no-repeat;
   min-height: 100vh;
-  overflow: hidden;
+  overflow-y: hidden !important;
+
+}
+
+.drawer {
+  height: 86vh;
+}
+
+.footer {
+  height: 9vh;
+}
+
+@media (max-width: 768px) {
+  .footerLogo {
+    width: 50%;
+  }
+
+  .headerLogo {
+    width: 50%;
+  }
 }

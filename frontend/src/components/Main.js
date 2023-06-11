@@ -290,7 +290,7 @@ export const Main = () => {
 
             <div className="drawer mainDrawer h-screen">
                 <input id="my-drawer" type="checkbox" className="drawer-toggle" />
-                <div className="drawer-content">
+                <div className="drawer-content ">
                     <div className="mx-10">
                         <h2 className="my-4">
                             {username ? <p className="text-xl font-medium text-black">Welcome {username.toUpperCase()}</p> : ''}
@@ -304,8 +304,8 @@ export const Main = () => {
                                                 ref={provided.innerRef}
                                                 style={{ backgroundColor: snapshot.isDraggingOver ? 'hsla(0, 0%, 100%, .6)' : 'hsla(0, 0%, 100%, .2)' }}
                                                 {...provided.droppableProps}
-                                                className="kanbanCategory h-screen"
-                                            >
+                                                className="kanbanCategory ">
+
                                                 <div>
                                                     <CategoryColumn cat={cat} updateCategory={updateCategory} setCategoryTitle={setCategoryTitle} accessToken={accessToken} categories={categories} category={category} taskItems={taskItems} />
                                                 </div>
@@ -323,15 +323,15 @@ export const Main = () => {
                                                                     >
                                                                         <div className="kanbanCard bg-white rounded-md mb-5 shadow-2xl">
                                                                             {task.priority === 1 ?
-                                                                                <label className="bg-gradient-to-r from-blue-500 to-blue px-2 block ">
+                                                                                <label className="bg-gradient-to-r from-blue-500 to-blue px-2 block rounded-md">
                                                                                     Low priority
                                                                                 </label>
                                                                                 : task.priority === 2 ?
-                                                                                    <label className="bg-gradient-to-r from-yellow-500 to-yellow px-2 block">
+                                                                                    <label className="bg-gradient-to-r from-yellow-500 to-yellow px-2 block rounded-md">
                                                                                         Medium priority
                                                                                     </label>
                                                                                     : task.priority === 3 ?
-                                                                                        <label className="bg-gradient-to-r from-red-500 to-red px-2 block">
+                                                                                        <label className="bg-gradient-to-r from-red-500 to-red px-2 block rounded-md ">
                                                                                             High priority
                                                                                         </label>
                                                                                         : ""}
