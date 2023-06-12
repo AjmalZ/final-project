@@ -29,13 +29,21 @@ export const Main = () => {
 
     const [categoryTitle, setCategoryTitle] = useState('');
     const [taskDueDate, setTaskDueDate] = useState("");
-    const [taskPriority, setTaskPriority] = useState(null);
+    const [taskPriority, setTaskPriority] = useState(1);
 
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
 
     const [filterByCategory, setFilterByCategory] = useState([])
+
+    const resetForm = () => {
+        setTaskTitle('');
+        setTaskMessage('');
+        setTaskCategory(categories.length > 0 ? categories[0]._id : null);
+        setTaskDueDate("");
+        setTaskPriority(1);
+    }
 
     useEffect(() => {
         if (!accessToken) {
@@ -100,6 +108,7 @@ export const Main = () => {
             });
     }, [accessToken, dispatch]);
 
+
     const addTask = (e) => {
         const cat = taskCategory ? taskCategory : categories[0]._id;
         const options = {
@@ -117,11 +126,7 @@ export const Main = () => {
                 if (data.success) {
                     dispatch(tasks.actions.setError(null));
                     dispatch(tasks.actions.setItems([...taskItems, data.response]));
-                    setTaskTitle('');
-                    setTaskMessage('');
-                    setTaskCategory(categories.length > 0 ? categories[0]._id : null);
-                    setTaskDueDate("");
-                    setTaskPriority(null);
+                    resetForm();
                 } else {
                     dispatch(tasks.actions.setError(data.error));
                 }
@@ -212,6 +217,7 @@ export const Main = () => {
                 if (data.success) {
                     let taskItemsWithoutTask = taskItems.filter((item) => item._id !== taskId);
                     dispatch(tasks.actions.setError(null));
+                    resetForm()
                     dispatch(tasks.actions.setItems([...taskItemsWithoutTask, data.response]));
                 } else {
                     dispatch(tasks.actions.setError(data.error));
@@ -323,15 +329,15 @@ export const Main = () => {
                                                                     >
                                                                         <div className="kanbanCard bg-white rounded-md mb-5 shadow-2xl">
                                                                             {task.priority === 1 ?
-                                                                                <label className="bg-gradient-to-r from-blue-500 to-blue px-2 block rounded-md">
+                                                                                <label className="bg-gradient-to-r from-blue-500 to-blue px-2 block rounded-md borderBottomRadius0">
                                                                                     Low priority
                                                                                 </label>
                                                                                 : task.priority === 2 ?
-                                                                                    <label className="bg-gradient-to-r from-yellow-500 to-yellow px-2 block rounded-md">
+                                                                                    <label className="bg-gradient-to-r from-yellow-500 to-yellow px-2 block rounded-md borderBottomRadius0">
                                                                                         Medium priority
                                                                                     </label>
                                                                                     : task.priority === 3 ?
-                                                                                        <label className="bg-gradient-to-r from-red-500 to-red px-2 block rounded-md ">
+                                                                                        <label className="bg-gradient-to-r from-red-500 to-red px-2 block rounded-md borderBottomRadius0">
                                                                                             High priority
                                                                                         </label>
                                                                                         : ""}

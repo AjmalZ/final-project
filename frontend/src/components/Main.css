@@ -6,7 +6,9 @@
 .kanbanCategory {
   width: 230px;
   padding: 10px;
-
+  height: 80vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 #root {
@@ -24,11 +26,12 @@
 }
 
 .drawer {
-  height: 86vh;
+  height: 100vh;
 }
 
 .footer {
-  height: 9vh;
+  position: absolute;
+  bottom: 0;
 }
 
 @media (max-width: 768px) {
@@ -39,4 +42,9 @@
   .headerLogo {
     width: 50%;
   }
+}
+
+.borderBottomRadius0 {
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
 }

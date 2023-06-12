@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { API_URL } from 'utils/urls';
 import { useDispatch } from 'react-redux';
 
 export const CategoryColumn = ({ cat, updateCategory, setCategoryTitle, categories, accessToken, category, taskItems }) => {
     const dispatch = useDispatch();
+    const [showCategoryDeleteModal, setShowCategoryDeleteModal] = useState(false);
     const update = (event) => {
         updateCategory(cat._id)
     }
@@ -27,6 +28,20 @@ export const CategoryColumn = ({ cat, updateCategory, setCategoryTitle, categori
             });
     };
     const filteredTasks = taskItems.filter(item => item.category === cat._id);
+
+    const handleCategoryDelete = () => {
+        setShowCategoryDeleteModal(true);
+    };
+
+    const handleConfirmCategoryDelete = () => {
+        deleteCategory(cat._id);
+        setShowCategoryDeleteModal(false);
+    };
+
+    const handleCancelCategoryDelete = () => {
+        setShowCategoryDeleteModal(false);
+    };
+
     return (
         <div key={cat._id}>
             {/* The button to open modal */}
@@ -50,8 +65,18 @@ export const CategoryColumn = ({ cat, updateCategory, setCategoryTitle, categori
                     </div>
                     <div className="modal-action">
                         <a href="#" className="btn btn-sm">Close</a>
-                        <a href="#" className='btn btn-sm' onClick={() => { if (window.confirm('Are you sure you want to delete this category?')) deleteCategory(cat._id) }}>Delete</a>
+                        <a href="#" className="btn btn-sm" onClick={handleCategoryDelete}>Delete</a>
                         <a href="#" className="btn btn-sm" onClick={update}>Update Category</a>
+                    </div>
+                </div>
+            </div>
+            <div className={showCategoryDeleteModal ? 'modal modal-open' : 'modal'} id="my_category_delete_modal">
+                <div className="modal-box">
+                    <h3 className="font-bold text-lg">Delete category</h3>
+                    <p className="py-4">Are you sure you want to delete this category?</p>
+                    <div className="modal-action">
+                        <a href="#" className="btn" onClick={handleConfirmCategoryDelete}>Yes</a>
+                        <a href="#" className="btn" onClick={handleCancelCategoryDelete}>No</a>
                     </div>
                 </div>
             </div>
