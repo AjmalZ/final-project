@@ -24,27 +24,11 @@ export const Main = () => {
     const username = useSelector((store) => store.user.username);
     const navigate = useNavigate();
 
-    const [taskTitle, setTaskTitle] = useState('');
-    const [taskMessage, setTaskMessage] = useState('');
-    const [taskCategory, setTaskCategory] = useState(categories.length > 0 ? categories[0]._id : "");
-
-    const [categoryTitle, setCategoryTitle] = useState('');
-    const [taskDueDate, setTaskDueDate] = useState("");
-    const [taskPriority, setTaskPriority] = useState(1);
-
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
 
     const [filterByCategory, setFilterByCategory] = useState([])
-
-    const resetForm = () => {
-        setTaskTitle('');
-        setTaskMessage('');
-        setTaskCategory(categories.length > 0 ? categories[0]._id : "");
-        setTaskDueDate("");
-        setTaskPriority(1);
-    }
 
     useEffect(() => {
         if (!accessToken) {
@@ -128,56 +112,6 @@ export const Main = () => {
             });
     };
 
-
-    const updateCategory = (categoryId) => {
-        const options = {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: accessToken,
-            },
-            body: JSON.stringify({ title: categoryTitle }),
-        };
-        fetch(API_URL(`category/${categoryId}`), options)
-            .then((res) => res.json())
-            .then((data) => {
-                if (data.success) {
-                    dispatch(category.actions.setError(null));
-                    const tempCategories = categories.map((item) => {
-                        return { ...item, title: item._id === categoryId ? categoryTitle : item.title };
-                    });
-                    dispatch(category.actions.setItems([...tempCategories]));
-                } else {
-                    dispatch(category.actions.setError(data.error));
-                }
-            });
-    };
-
-    const updateTask = (taskId) => {
-        const options = {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: accessToken,
-            },
-            body: JSON.stringify({ title: taskTitle, message: taskMessage, dueDate: taskDueDate, category: taskCategory, priority: taskPriority }),
-        };
-
-        fetch(API_URL(`tasks/${taskId}`), options)
-            .then((res) => res.json())
-            .then((data) => {
-                if (data.success) {
-                    let taskItemsWithoutTask = taskItems.filter((item) => item._id !== taskId);
-                    dispatch(tasks.actions.setError(null));
-                    resetForm()
-                    dispatch(tasks.actions.setItems([...taskItemsWithoutTask, data.response]));
-                } else {
-                    dispatch(tasks.actions.setError(data.error));
-                }
-            });
-    };
-
-    //This should be removed, use the one above
     const updateTaskDropped = (taskId, title, message, cat, dueDate, priority) => {
         const options = {
             method: 'PATCH',
@@ -265,7 +199,7 @@ export const Main = () => {
                                                 className="kanbanCategory scrollbar-thin">
 
                                                 <div>
-                                                    <CategoryColumn cat={cat} updateCategory={updateCategory} setCategoryTitle={setCategoryTitle} accessToken={accessToken} categories={categories} category={category} taskItems={taskItems} />
+                                                    <CategoryColumn cat={cat} taskItems={taskItems} />
                                                 </div>
                                                 <div>
                                                     {taskItems
@@ -279,19 +213,7 @@ export const Main = () => {
                                                                         {...provided.draggableProps}
                                                                         {...provided.dragHandleProps}
                                                                     >
-                                                                        <ToDoCard
-                                                                            task={task}
-                                                                            categories={categories}
-                                                                            updateTask={updateTask}
-                                                                            setTaskTitle={setTaskTitle}
-                                                                            setTaskMessage={setTaskMessage}
-                                                                            setTaskCategory={setTaskCategory}
-                                                                            setTaskDueDate={setTaskDueDate}
-                                                                            setTaskPriority={setTaskPriority}
-                                                                            accessToken={accessToken}
-                                                                            tasks={tasks}
-                                                                            taskItems={taskItems}
-                                                                        />
+                                                                        <ToDoCard task={task} taskItems={taskItems} />
                                                                     </div>
                                                                 )}
                                                             </Draggable>
@@ -309,21 +231,8 @@ export const Main = () => {
                     </div>
                 </div>
                 <SideDrawer filterByCategory={filterByCategory} setFilterByCategory={setFilterByCategory} />
-                <NewTaskButton
-                    taskTitle={taskTitle}
-                    taskMessage={taskMessage}
-                    taskCategory={taskCategory}
-                    setTaskTitle={setTaskTitle}
-                    setTaskCategory={setTaskCategory}
-                    setTaskMessage={setTaskMessage}
-                    taskDueDate={taskDueDate}
-                    setTaskDueDate={setTaskDueDate}
-                    setTaskPriority={setTaskPriority}
-                    taskPriority={taskPriority}
-                    taskItems={taskItems}
-                    resetForm={resetForm}
-                />
-                <NewCategoryButton categoryTitle={categoryTitle} setCategoryTitle={setCategoryTitle} />
+                <NewTaskButton taskItems={taskItems} />
+                <NewCategoryButton />
 
             </div>
             <Footer />

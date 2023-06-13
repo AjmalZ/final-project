@@ -5,18 +5,7 @@ import { user } from 'reducers/User';
 import { tasks } from 'reducers/Tasks';
 
 export const NewTaskButton = ({
-    taskTitle,
-    taskMessage,
-    taskCategory,
-    setTaskTitle,
-    setTaskCategory,
-    setTaskMessage,
-    taskDueDate,
-    setTaskDueDate,
-    setTaskPriority,
-    taskPriority,
-    taskItems,
-    resetForm
+    taskItems
 }) => {
 
     const dispatch = useDispatch();
@@ -24,6 +13,11 @@ export const NewTaskButton = ({
     const categories = useSelector((store) => store.category.items);
     const [showError, setShowError] = useState(false)
 
+    const [taskTitle, setTaskTitle] = useState('');
+    const [taskMessage, setTaskMessage] = useState('');
+    const [taskCategory, setTaskCategory] = useState(categories.length > 0 ? categories[0]._id : "");
+    const [taskDueDate, setTaskDueDate] = useState("");
+    const [taskPriority, setTaskPriority] = useState(1);
 
     const handleChange = (event) => {
         setTaskCategory(event.target.value)
@@ -31,6 +25,14 @@ export const NewTaskButton = ({
     const handlePriorityChange = (event) => {
         setTaskPriority(event.target.value)
     };
+
+    const resetForm = () => {
+        setTaskTitle('');
+        setTaskMessage('');
+        setTaskCategory(categories.length > 0 ? categories[0]._id : "");
+        setTaskDueDate("");
+        setTaskPriority(1);
+    }
 
     const addTask = () => {
         if (taskTitle === "") {

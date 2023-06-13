@@ -1,9 +1,26 @@
 import React, { useState } from 'react';
 import { API_URL } from 'utils/urls';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { tasks } from 'reducers/Tasks';
 
-export const ToDoCard = ({ task, categories, updateTask, setTaskTitle, setTaskMessage, setTaskCategory, setTaskDueDate, setTaskPriority, accessToken, tasks, taskItems }) => {
+export const ToDoCard = ({ task, taskItems }) => {
     const selectedCategory = task.category ?? categories[0];
+    const categories = useSelector((store) => store.category.items);
+    const accessToken = useSelector((store) => store.user.accessToken);
+
+    const [taskTitle, setTaskTitle] = useState('');
+    const [taskMessage, setTaskMessage] = useState('');
+    const [taskCategory, setTaskCategory] = useState(categories.length > 0 ? categories[0]._id : "");
+    const [taskDueDate, setTaskDueDate] = useState("");
+    const [taskPriority, setTaskPriority] = useState(1);
+
+    const resetForm = () => {
+        setTaskTitle('');
+        setTaskMessage('');
+        setTaskCategory(categories.length > 0 ? categories[0]._id : "");
+        setTaskDueDate("");
+        setTaskPriority(1);
+    }
 
     const dispatch = useDispatch();
     const [showTaskDeleteModal, setShowTaskDeleteModal] = useState(false);
@@ -22,6 +39,30 @@ export const ToDoCard = ({ task, categories, updateTask, setTaskTitle, setTaskMe
 
     const dateObject = task.dueDate ? new Date(task.dueDate) : "";
     const formattedDate = dateObject !== "" ? dateObject.toLocaleDateString('sv-SE', { year: 'numeric', month: '2-digit', day: '2-digit' }) : "";
+
+    const updateTask = (taskId) => {
+        const options = {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: accessToken,
+            },
+            body: JSON.stringify({ title: taskTitle, message: taskMessage, dueDate: taskDueDate, category: taskCategory, priority: taskPriority }),
+        };
+
+        fetch(API_URL(`tasks/${taskId}`), options)
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.success) {
+                    let taskItemsWithoutTask = taskItems.filter((item) => item._id !== taskId);
+                    dispatch(tasks.actions.setError(null));
+                    resetForm()
+                    dispatch(tasks.actions.setItems([...taskItemsWithoutTask, data.response]));
+                } else {
+                    dispatch(tasks.actions.setError(data.error));
+                }
+            });
+    };
 
     const deleteTask = (taskId) => {
         const options = {

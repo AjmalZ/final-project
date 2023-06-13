@@ -1,13 +1,43 @@
 import React, { useState } from 'react';
 import { API_URL } from 'utils/urls';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { category } from 'reducers/Category';
 
-export const CategoryColumn = ({ cat, updateCategory, setCategoryTitle, categories, accessToken, category, taskItems }) => {
+export const CategoryColumn = ({ cat, taskItems }) => {
     const dispatch = useDispatch();
     const [showCategoryDeleteModal, setShowCategoryDeleteModal] = useState(false);
+    const categories = useSelector((store) => store.category.items);
+    const accessToken = useSelector((store) => store.user.accessToken);
+    const [categoryTitle, setCategoryTitle] = useState('');
+
     const update = (event) => {
         updateCategory(cat._id)
     }
+
+    const updateCategory = (categoryId) => {
+        const options = {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: accessToken,
+            },
+            body: JSON.stringify({ title: categoryTitle }),
+        };
+        fetch(API_URL(`category/${categoryId}`), options)
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.success) {
+                    dispatch(category.actions.setError(null));
+                    const tempCategories = categories.map((item) => {
+                        return { ...item, title: item._id === categoryId ? categoryTitle : item.title };
+                    });
+                    dispatch(category.actions.setItems([...tempCategories]));
+                } else {
+                    dispatch(category.actions.setError(data.error));
+                }
+            });
+    };
+
     const deleteCategory = (categoryId) => {
         const options = {
             method: 'DELETE',
@@ -63,10 +93,12 @@ export const CategoryColumn = ({ cat, updateCategory, setCategoryTitle, categori
                         </label>
                         <input type="text" onChange={(e) => setCategoryTitle(e.target.value)} name="title" placeholder="Type here" className="input input-bordered w-full max-w-xs" defaultValue={cat.title} />
                     </div>
-                    <div className="modal-action">
+                    <div className="modal-action flex justify-between">
                         <a href="#" className="btn btn-sm">Close</a>
-                        <a href="#" className="btn btn-sm" onClick={handleCategoryDelete}>Delete</a>
-                        <a href="#" className="btn btn-sm" onClick={update}>Update Category</a>
+                        <div className="flex gap-4">
+                            <a href="#" className="btn btn-sm btn-error" onClick={handleCategoryDelete}>Delete</a>
+                            <a href="#" className="btn btn-sm" onClick={update}>Update Category</a>
+                        </div>
                     </div>
                 </div>
             </div>
