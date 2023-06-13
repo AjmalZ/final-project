@@ -7,8 +7,9 @@
   width: 230px;
   padding: 10px;
   height: 80vh;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
+  scrollbar-color: rgb(2, 20, 49) transparent;
 }
 
 #root {

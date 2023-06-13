@@ -250,7 +250,7 @@ export const Main = () => {
 
                 <input id="my-drawer" type="checkbox" className="drawer-toggle" />
 
-                <div className="drawer-content scrollbar-thin">
+                <div className="drawer-content">
                     <div className="mx-10">
                         <WelcomeText username={username} />
                         <div className="flex gap-5 w-full justify-items-center kanban">
@@ -262,7 +262,7 @@ export const Main = () => {
                                                 ref={provided.innerRef}
                                                 style={{ backgroundColor: snapshot.isDraggingOver ? 'hsla(0, 0%, 100%, .6)' : 'hsla(0, 0%, 100%, .2)' }}
                                                 {...provided.droppableProps}
-                                                className="kanbanCategory ">
+                                                className="kanbanCategory scrollbar-thin">
 
                                                 <div>
                                                     <CategoryColumn cat={cat} updateCategory={updateCategory} setCategoryTitle={setCategoryTitle} accessToken={accessToken} categories={categories} category={category} taskItems={taskItems} />
