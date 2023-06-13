@@ -95,6 +95,10 @@ export const Login = () => {
                     dispatch(user.actions.setUsername(data.response.username));
                     dispatch(user.actions.setUserId(data.response.id));
                     dispatch(user.actions.setError(null));
+                    defaultCategoryToDo(data.response.id, data.response.accessToken, "To-Do")
+                    defaultCategoryToDo(data.response.id, data.response.accessToken, "In-Progress")
+                    defaultCategoryToDo(data.response.id, data.response.accessToken, "Done")
+                    defaultCategoryToDo(data.response.id, data.response.accessToken, "Backlog")
                     navigate("/"); // Redirect to home page
                 } else {
                     // Handle registration error
@@ -108,6 +112,29 @@ export const Login = () => {
             });
     };
 
+
+    const defaultCategoryToDo = (userId, userToken, categoryTitle) => {
+
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: userToken,
+            },
+            body: JSON.stringify({ title: categoryTitle, user: userId }),
+        };
+
+        fetch(API_URL('category'), options)
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.success) {
+                    console.log(categoryTitle + " added successfully")
+
+                } else {
+                    console.log(data.error)
+                }
+            });
+    }
     // Handle login button click
     const handleLoginButtonClick = () => {
         setMode("login");

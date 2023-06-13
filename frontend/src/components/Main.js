@@ -133,7 +133,7 @@ export const Main = () => {
             });
 
     };
-    const addCategory = (e) => {
+    const addCategory = () => {
         const options = {
             method: 'POST',
             headers: {
