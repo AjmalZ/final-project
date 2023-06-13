@@ -1,6 +1,34 @@
 import React from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import { user } from 'reducers/User';
+import { API_URL } from 'utils/urls';
+import { category } from 'reducers/Category';
 
-export const NewCategoryButton = ({ categoryTitle, setCategoryTitle, addCategory }) => {
+
+export const NewCategoryButton = ({ categoryTitle, setCategoryTitle }) => {
+    const dispatch = useDispatch();
+    const accessToken = useSelector((store) => store.user.accessToken);
+    const categories = useSelector((store) => store.category.items);
+    const addCategory = () => {
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: accessToken,
+            },
+            body: JSON.stringify({ title: categoryTitle, user: user._id }),
+        };
+        fetch(API_URL('category'), options)
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.success) {
+                    dispatch(category.actions.setError(null));
+                    dispatch(category.actions.setItems([...categories, data.response]));
+                } else {
+                    dispatch(category.actions.setError(data.error));
+                }
+            });
+    };
     return (
         <div>
             <div className="modal" id="my_modal_category">

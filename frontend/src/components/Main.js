@@ -14,6 +14,7 @@ import { SideDrawer } from './SideDrawer';
 import { NewCategoryButton } from './NewCategoryButton';
 import { NewTaskButton } from './NewTaskButton';
 import { Footer } from './Footer';
+import { WelcomeText } from './WelcomeText';
 
 export const Main = () => {
     const taskItems = useSelector((store) => store.tasks.items);
@@ -25,7 +26,7 @@ export const Main = () => {
 
     const [taskTitle, setTaskTitle] = useState('');
     const [taskMessage, setTaskMessage] = useState('');
-    const [taskCategory, setTaskCategory] = useState(categories.length > 0 ? categories[0]._id : null);
+    const [taskCategory, setTaskCategory] = useState(categories.length > 0 ? categories[0]._id : "");
 
     const [categoryTitle, setCategoryTitle] = useState('');
     const [taskDueDate, setTaskDueDate] = useState("");
@@ -40,7 +41,7 @@ export const Main = () => {
     const resetForm = () => {
         setTaskTitle('');
         setTaskMessage('');
-        setTaskCategory(categories.length > 0 ? categories[0]._id : null);
+        setTaskCategory(categories.length > 0 ? categories[0]._id : "");
         setTaskDueDate("");
         setTaskPriority(1);
     }
@@ -100,60 +101,12 @@ export const Main = () => {
                     setFirstName(data.response.firstName)
                     setLastName(data.response.lastName)
                     setEmail(data.response.email)
-                    dispatch(user.actions.setItem(data.response));
+                    //dispatch(user.actions.setItem(data.response));
                 } else {
                     dispatch(user.actions.setError(data.error));
-                    dispatch(user.actions.setItem(null));
                 }
             });
     }, [accessToken, dispatch]);
-
-
-    const addTask = (e) => {
-        const cat = taskCategory ? taskCategory : categories[0]._id;
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: accessToken,
-            },
-            body: JSON.stringify({ title: taskTitle, message: taskMessage, dueDate: taskDueDate, category: cat, priority: taskPriority, user: user._id }),
-        };
-
-        fetch(API_URL('tasks'), options)
-            .then((res) => res.json())
-            .then((data) => {
-                if (data.success) {
-                    dispatch(tasks.actions.setError(null));
-                    dispatch(tasks.actions.setItems([...taskItems, data.response]));
-                    resetForm();
-                } else {
-                    dispatch(tasks.actions.setError(data.error));
-                }
-            });
-
-    };
-    const addCategory = () => {
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: accessToken,
-            },
-            body: JSON.stringify({ title: categoryTitle, user: user._id }),
-        };
-        fetch(API_URL('category'), options)
-            .then((res) => res.json())
-            .then((data) => {
-                if (data.success) {
-                    dispatch(category.actions.setError(null));
-                    dispatch(category.actions.setItems([...categories, data.response]));
-                } else {
-                    dispatch(category.actions.setError(data.error));
-                }
-            });
-    };
-
 
     const updateUser = (userId) => {
         const options = {
@@ -168,8 +121,7 @@ export const Main = () => {
             .then((res) => res.json())
             .then((data) => {
                 if (data.success) {
-                    //dispatch(user.actions.setError(null));
-                    //dispatch(category.actions.setItems([...tempCategories]));
+                    console.log("User updated successfully")
                 } else {
                     dispatch(user.actions.setError(data.error));
                 }
@@ -295,12 +247,12 @@ export const Main = () => {
 
 
             <div className="drawer mainDrawer h-screen">
+
                 <input id="my-drawer" type="checkbox" className="drawer-toggle" />
-                <div className="drawer-content ">
+
+                <div className="drawer-content scrollbar-thin">
                     <div className="mx-10">
-                        <h2 className="my-4">
-                            {username ? <p className="text-xl font-medium text-black">Welcome {username.toUpperCase()}</p> : ''}
-                        </h2>
+                        <WelcomeText username={username} />
                         <div className="flex gap-5 w-full justify-items-center kanban">
                             <DragDropContext onDragEnd={onDragEnd}>
                                 {categories.map((cat) => (
@@ -358,8 +310,6 @@ export const Main = () => {
                 </div>
                 <SideDrawer filterByCategory={filterByCategory} setFilterByCategory={setFilterByCategory} />
                 <NewTaskButton
-                    addTask={addTask}
-                    categories={categories}
                     taskTitle={taskTitle}
                     taskMessage={taskMessage}
                     taskCategory={taskCategory}
@@ -370,8 +320,10 @@ export const Main = () => {
                     setTaskDueDate={setTaskDueDate}
                     setTaskPriority={setTaskPriority}
                     taskPriority={taskPriority}
+                    taskItems={taskItems}
+                    resetForm={resetForm}
                 />
-                <NewCategoryButton categoryTitle={categoryTitle} setCategoryTitle={setCategoryTitle} addCategory={addCategory} />
+                <NewCategoryButton categoryTitle={categoryTitle} setCategoryTitle={setCategoryTitle} />
 
             </div>
             <Footer />
