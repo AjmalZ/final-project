@@ -35,17 +35,20 @@
   bottom: 0;
 }
 
-@media (max-width: 768px) {
-  .footerLogo {
-    width: 50%;
-  }
-
-  .headerLogo {
-    width: 50%;
-  }
-}
-
 .borderBottomRadius0 {
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
+}
+
+@media (max-width: 768px) {
+
+  .footerLogo,
+  .headerLogo {
+    width: 50%;
+  }
+
+  #root,
+  .drawer {
+    height: 76vh;
+  }
 }
