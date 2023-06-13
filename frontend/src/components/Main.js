@@ -10,7 +10,7 @@ import { ToDoCard } from './ToDoCard';
 import './Main.css';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { CategoryColumn } from './CategoryColumn';
-import { ButtonGroup } from './ButtonGroup';
+import { SideDrawer } from './SideDrawer';
 import { NewCategoryButton } from './NewCategoryButton';
 import { NewTaskButton } from './NewTaskButton';
 import { Footer } from './Footer';
@@ -327,36 +327,19 @@ export const Main = () => {
                                                                         {...provided.draggableProps}
                                                                         {...provided.dragHandleProps}
                                                                     >
-                                                                        <div className="kanbanCard bg-white rounded-md mb-5 shadow-2xl">
-                                                                            {task.priority === 1 ?
-                                                                                <label className="bg-gradient-to-r from-blue-500 to-blue px-2 block rounded-md borderBottomRadius0">
-                                                                                    Low priority
-                                                                                </label>
-                                                                                : task.priority === 2 ?
-                                                                                    <label className="bg-gradient-to-r from-yellow-500 to-yellow px-2 block rounded-md borderBottomRadius0">
-                                                                                        Medium priority
-                                                                                    </label>
-                                                                                    : task.priority === 3 ?
-                                                                                        <label className="bg-gradient-to-r from-red-500 to-red px-2 block rounded-md borderBottomRadius0">
-                                                                                            High priority
-                                                                                        </label>
-                                                                                        : ""}
-                                                                            <div className="text-gray-600 text-sm">
-                                                                                <ToDoCard
-                                                                                    task={task}
-                                                                                    categories={categories}
-                                                                                    updateTask={updateTask}
-                                                                                    setTaskTitle={setTaskTitle}
-                                                                                    setTaskMessage={setTaskMessage}
-                                                                                    setTaskCategory={setTaskCategory}
-                                                                                    setTaskDueDate={setTaskDueDate}
-                                                                                    setTaskPriority={setTaskPriority}
-                                                                                    accessToken={accessToken}
-                                                                                    tasks={tasks}
-                                                                                    taskItems={taskItems}
-                                                                                />
-                                                                            </div>
-                                                                        </div>
+                                                                        <ToDoCard
+                                                                            task={task}
+                                                                            categories={categories}
+                                                                            updateTask={updateTask}
+                                                                            setTaskTitle={setTaskTitle}
+                                                                            setTaskMessage={setTaskMessage}
+                                                                            setTaskCategory={setTaskCategory}
+                                                                            setTaskDueDate={setTaskDueDate}
+                                                                            setTaskPriority={setTaskPriority}
+                                                                            accessToken={accessToken}
+                                                                            tasks={tasks}
+                                                                            taskItems={taskItems}
+                                                                        />
                                                                     </div>
                                                                 )}
                                                             </Draggable>
@@ -373,17 +356,7 @@ export const Main = () => {
                         </div>
                     </div>
                 </div>
-                <div className="drawer-side">
-                    <label htmlFor="my-drawer" className="drawer-overlay"></label>
-                    <ul className="menu p-4 w-80 h-full bg-base-200 text-base-content">
-                        <div className="buttonGroup flex justify-center">
-                            <ButtonGroup filterByCategory={filterByCategory} setFilterByCategory={setFilterByCategory} />
-                        </div>
-                        <li className="py-2"><a href="#my_modal_task" className="btn btn-sm py-2 text-white">+Add New Task</a></li>
-                        <li className="py-2"><a href="#my_modal_category" className="btn btn-sm py-2 text-white">+Add New Category</a></li>
-
-                    </ul>
-                </div>
+                <SideDrawer filterByCategory={filterByCategory} setFilterByCategory={setFilterByCategory} />
                 <NewTaskButton
                     addTask={addTask}
                     categories={categories}
