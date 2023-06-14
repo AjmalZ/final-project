@@ -4,43 +4,59 @@ import { API_URL } from 'utils/urls';
 import { user } from 'reducers/User';
 import { tasks } from 'reducers/Tasks';
 
+// Component for a button to add a new task
 export const NewTaskButton = ({
     taskItems
 }) => {
-
     const dispatch = useDispatch();
-    const accessToken = useSelector((store) => store.user.accessToken);
-    const categories = useSelector((store) => store.category.items);
-    const [showError, setShowError] = useState(false)
 
+    // Get the access token from the Redux store
+    const accessToken = useSelector((store) => store.user.accessToken);
+
+    // Get the list of categories from the Redux store
+    const categories = useSelector((store) => store.category.items);
+
+    // State to show/hide the error message
+    const [showError, setShowError] = useState(false);
+
+    // State for the task title, message, category, due date, and priority
     const [taskTitle, setTaskTitle] = useState('');
     const [taskMessage, setTaskMessage] = useState('');
     const [taskCategory, setTaskCategory] = useState(categories.length > 0 ? categories[0]._id : "");
     const [taskDueDate, setTaskDueDate] = useState("");
     const [taskPriority, setTaskPriority] = useState(1);
 
+    // Function to handle changes in the task category dropdown
     const handleChange = (event) => {
-        setTaskCategory(event.target.value)
-    };
-    const handlePriorityChange = (event) => {
-        setTaskPriority(event.target.value)
+        setTaskCategory(event.target.value);
     };
 
+    // Function to handle changes in the task priority dropdown
+    const handlePriorityChange = (event) => {
+        setTaskPriority(event.target.value);
+    };
+
+    // Function to reset the task form
     const resetForm = () => {
         setTaskTitle('');
         setTaskMessage('');
         setTaskCategory(categories.length > 0 ? categories[0]._id : "");
         setTaskDueDate("");
         setTaskPriority(1);
-    }
+    };
 
+    // Function to add a new task
     const addTask = () => {
         if (taskTitle === "") {
-            setShowError(true)
-            return
+            setShowError(true);
+            return;
         }
-        setShowError(false)
+        setShowError(false);
+
+        // Get the selected category or use the first category in the list
         const cat = taskCategory ? taskCategory : categories[0]._id;
+
+        // Prepare the request options
         const options = {
             method: 'POST',
             headers: {
@@ -50,22 +66,26 @@ export const NewTaskButton = ({
             body: JSON.stringify({ title: taskTitle, message: taskMessage, dueDate: taskDueDate, category: cat, priority: taskPriority, user: user._id }),
         };
 
+        // Send the POST request to add a new task
         fetch(API_URL('tasks'), options)
             .then((res) => res.json())
             .then((data) => {
                 if (data.success) {
+                    // If the API call is successful, update the Redux store and reset the task form
                     dispatch(tasks.actions.setError(null));
                     dispatch(tasks.actions.setItems([...taskItems, data.response]));
 
                     resetForm();
                 } else {
+                    // If the API call fails, update the error state in the Redux store
                     dispatch(tasks.actions.setError(data.error));
                 }
             });
-
     };
+
     return (
         <div>
+            {/* New task modal */}
             <div id="my_modal_task" className="modal">
                 <div className="modal-box">
                     <div className="form-control w-full max-w-xs">
@@ -87,6 +107,7 @@ export const NewTaskButton = ({
                             <span className="label-text">Category</span>
                         </label>
 
+                        {/* Dropdown to select the task category */}
                         <select className="select select-bordered" onChange={handleChange} name="category" value={taskCategory}>
                             {categories.map((cat) => (
                                 <option value={cat._id} key={cat._id}>{cat.title}</option>
@@ -98,6 +119,7 @@ export const NewTaskButton = ({
                             <span className="label-text">Priority</span>
                         </label>
 
+                        {/* Dropdown to select the task priority */}
                         <select className="select select-bordered" onChange={handlePriorityChange} name="priority" value={taskPriority}>
                             <option disabled={true} value="">Select Priority</option>
                             <option value={1} key={1}>Low</option>
