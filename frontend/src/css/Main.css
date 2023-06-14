@@ -40,6 +40,10 @@
   border-bottom-right-radius: 0px;
 }
 
+.badge {
+  height: 55%;
+}
+
 @media (max-width: 768px) {
 
   .footerLogo,
@@ -50,5 +54,9 @@
   #root,
   .drawer {
     height: 76vh;
+  }
+
+  .text-xl {
+    font-size: 1.05rem;
   }
 }

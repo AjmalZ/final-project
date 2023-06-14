@@ -139,8 +139,8 @@ export const ToDoCard = ({ task, taskItems }) => {
             <div className="text-gray-600 text-sm">
                 <div key={task._id}>
                     <a href={"#" + task._id}>
-                        <h1 className="text-base font-semibold ">{task.title}</h1>
-                        <h2 className="text-xs text-neutral-500">{task.message}</h2>
+                        <h1 className="text-base font-semibold text-black pt-1 pl-2">{task.title}</h1>
+                        <h2 className="text-xs text-neutral-500 pt-1 pl-2">{task.message}</h2>
                         <p> {task.dueDate ? formattedDate : ""}</p>
                     </a>
                     <div className="modal" id={task._id}>
