@@ -7,12 +7,14 @@ export const ToDoCard = ({ task, taskItems }) => {
     const selectedCategory = task.category ?? categories[0];
     const categories = useSelector((store) => store.category.items);
     const accessToken = useSelector((store) => store.user.accessToken);
+    const dispatch = useDispatch();
 
     const [taskTitle, setTaskTitle] = useState('');
     const [taskMessage, setTaskMessage] = useState('');
     const [taskCategory, setTaskCategory] = useState(categories.length > 0 ? categories[0]._id : "");
     const [taskDueDate, setTaskDueDate] = useState("");
     const [taskPriority, setTaskPriority] = useState(1);
+    const [showTaskDeleteModal, setShowTaskDeleteModal] = useState(false);
 
     const resetForm = () => {
         setTaskTitle('');
@@ -21,9 +23,6 @@ export const ToDoCard = ({ task, taskItems }) => {
         setTaskDueDate("");
         setTaskPriority(1);
     }
-
-    const dispatch = useDispatch();
-    const [showTaskDeleteModal, setShowTaskDeleteModal] = useState(false);
 
     const update = (event) => {
         updateTask(task._id);
@@ -35,6 +34,19 @@ export const ToDoCard = ({ task, taskItems }) => {
 
     const handlePriorityChange = (event) => {
         setTaskPriority(event.target.value);
+    };
+
+    const handleDelete = () => {
+        setShowTaskDeleteModal(true);
+    };
+
+    const handleConfirmDelete = () => {
+        deleteTask(task._id);
+        setShowTaskDeleteModal(false);
+    };
+
+    const handleCancelDelete = () => {
+        setShowTaskDeleteModal(false);
     };
 
     const dateObject = task.dueDate ? new Date(task.dueDate) : "";
@@ -82,19 +94,6 @@ export const ToDoCard = ({ task, taskItems }) => {
                     dispatch(tasks.actions.setError(data.error));
                 }
             });
-    };
-
-    const handleDelete = () => {
-        setShowTaskDeleteModal(true);
-    };
-
-    const handleConfirmDelete = () => {
-        deleteTask(task._id);
-        setShowTaskDeleteModal(false);
-    };
-
-    const handleCancelDelete = () => {
-        setShowTaskDeleteModal(false);
     };
 
     return (

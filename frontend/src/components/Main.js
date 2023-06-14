@@ -7,7 +7,7 @@ import { API_URL } from 'utils/urls';
 import { user } from 'reducers/User';
 import { TopBar } from './TopBar';
 import { ToDoCard } from './ToDoCard';
-import './Main.css';
+import '../css/Main.css';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { CategoryColumn } from './CategoryColumn';
 import { SideDrawer } from './SideDrawer';
@@ -19,14 +19,9 @@ import { WelcomeText } from './WelcomeText';
 export const Main = () => {
     const taskItems = useSelector((store) => store.tasks.items);
     const categories = useSelector((store) => store.category.items);
-    const dispatch = useDispatch();
     const accessToken = useSelector((store) => store.user.accessToken);
-    const username = useSelector((store) => store.user.username);
+    const dispatch = useDispatch();
     const navigate = useNavigate();
-
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState('');
 
     const [filterByCategory, setFilterByCategory] = useState([])
 
@@ -77,49 +72,16 @@ export const Main = () => {
                 }
             });
 
-        fetch(API_URL('user'), options)
-            .then((res) => res.json())
-            .then((data) => {
-                if (data.success) {
-                    dispatch(user.actions.setError(null));
-                    setFirstName(data.response.firstName)
-                    setLastName(data.response.lastName)
-                    setEmail(data.response.email)
-                    //dispatch(user.actions.setItem(data.response));
-                } else {
-                    dispatch(user.actions.setError(data.error));
-                }
-            });
     }, [accessToken, dispatch]);
 
-    const updateUser = (userId) => {
+    const updateTaskDropped = (taskId, cat) => {
         const options = {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: accessToken,
             },
-            body: JSON.stringify({ firstName: firstName, lastName: lastName, email: email }),
-        };
-        fetch(API_URL(`user/${userId}`), options)
-            .then((res) => res.json())
-            .then((data) => {
-                if (data.success) {
-                    console.log("User updated successfully")
-                } else {
-                    dispatch(user.actions.setError(data.error));
-                }
-            });
-    };
-
-    const updateTaskDropped = (taskId, title, message, cat, dueDate, priority) => {
-        const options = {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: accessToken,
-            },
-            body: JSON.stringify({ title: title, message: message, category: cat, duDate: dueDate, priority: priority }),
+            body: JSON.stringify({ category: cat }),
         };
 
         fetch(API_URL(`tasks/${taskId}`), options)
@@ -135,13 +97,14 @@ export const Main = () => {
             });
     };
 
-
     const onDragEnd = (result) => {
+
         const { source, destination } = result;
         const tempTaskId = result.draggableId
         const tempCatId = result.destination.droppableId
-        const tempTask = taskItems.find((task) => task._id === tempTaskId);
-        updateTaskDropped(tempTaskId, tempTask.title, tempTask.message, tempCatId, tempTask.duDate);
+
+        updateTaskDropped(tempTaskId, tempCatId);
+
         if (!destination) return;
 
         if (source.droppableId === destination.droppableId && source.index === destination.index) {
@@ -167,26 +130,12 @@ export const Main = () => {
 
     return (
         <div className="mainContainer">
-            <TopBar
-                taskItems={taskItems}
-                firstName={firstName}
-                lastName={lastName}
-                setFirstName={setFirstName}
-                setLastName={setLastName}
-                email={email}
-                setEmail={setEmail}
-                updateUser={updateUser}
-            />
-
-
-
+            <TopBar taskItems={taskItems} />
             <div className="drawer mainDrawer h-screen">
-
                 <input id="my-drawer" type="checkbox" className="drawer-toggle" />
-
                 <div className="drawer-content">
                     <div className="mx-10">
-                        <WelcomeText username={username} />
+                        <WelcomeText />
                         <div className="flex gap-5 w-full justify-items-center kanban">
                             <DragDropContext onDragEnd={onDragEnd}>
                                 {categories.map((cat) => (
@@ -197,7 +146,6 @@ export const Main = () => {
                                                 style={{ backgroundColor: snapshot.isDraggingOver ? 'hsla(0, 0%, 100%, .6)' : 'hsla(0, 0%, 100%, .2)' }}
                                                 {...provided.droppableProps}
                                                 className="kanbanCategory scrollbar-thin">
-
                                                 <div>
                                                     <CategoryColumn cat={cat} taskItems={taskItems} />
                                                 </div>
@@ -218,13 +166,11 @@ export const Main = () => {
                                                                 )}
                                                             </Draggable>
                                                         ))}
-
                                                 </div>
                                                 {provided.placeholder}
                                             </div>
                                         )}
                                     </Droppable>
-
                                 ))}
                             </DragDropContext>
                         </div>
@@ -233,7 +179,6 @@ export const Main = () => {
                 <SideDrawer filterByCategory={filterByCategory} setFilterByCategory={setFilterByCategory} />
                 <NewTaskButton taskItems={taskItems} />
                 <NewCategoryButton />
-
             </div>
             <Footer />
         </div>

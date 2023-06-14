@@ -1,20 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { user } from 'reducers/User';
 import { SideBarBtn } from './SideBarBtn';
 import { ProfileModal } from './ProfileModal';
 import logo from '../logo/logo.png';
+import { API_URL } from 'utils/urls';
 
-export const TopBar = ({
-    taskItems,
-    firstName,
-    setFirstName,
-    lastName,
-    setLastName,
-    email,
-    setEmail,
-    updateUser
-}) => {
+export const TopBar = ({ taskItems }) => {
     const dispatch = useDispatch();
 
     const handleLogoutClick = () => {
@@ -24,15 +16,61 @@ export const TopBar = ({
         localStorage.removeItem('accessToken');
     };
 
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
 
     const username = useSelector((store) => store.user.username);
     const userInitials = username ? Array.from(username)[0] : ''
+    const accessToken = useSelector((store) => store.user.accessToken);
 
     const today = new Date();
     const formatToday = today.toLocaleDateString('sv-SE', { year: 'numeric', month: '2-digit', day: '2-digit' });
 
     let overdue = taskItems.filter((item) => item.dueDate && (new Date(item.dueDate).toLocaleDateString('sv-SE', { year: 'numeric', month: '2-digit', day: '2-digit' })) < formatToday);
     const overdueLength = overdue && overdue.length > 0 ? overdue.length : 0;
+
+    const updateUser = (userId) => {
+        const options = {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: accessToken,
+            },
+            body: JSON.stringify({ firstName: firstName, lastName: lastName, email: email }),
+        };
+        fetch(API_URL(`user/${userId}`), options)
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.success) {
+                    console.log("User updated successfully")
+                } else {
+                    dispatch(user.actions.setError(data.error));
+                }
+            });
+    };
+    useEffect(() => {
+        const options = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: accessToken,
+            },
+        };
+        fetch(API_URL('user'), options)
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.success) {
+                    dispatch(user.actions.setError(null));
+                    setFirstName(data.response.firstName)
+                    setLastName(data.response.lastName)
+                    setEmail(data.response.email)
+                    //dispatch(user.actions.setItem(data.response));
+                } else {
+                    dispatch(user.actions.setError(data.error));
+                }
+            });
+    }, [accessToken]);
 
     return (
         <div className="navbar bg-base-300">
@@ -48,7 +86,6 @@ export const TopBar = ({
                             <span className="badge badge-xs badge-primary indicator-item">{overdueLength}</span>
                         </div>
                     </label>
-
                     <div tabIndex={0} className="dropdown-content card card-compact w-64 p-2 shadow bg-primary text-primary-content">
                         <div className="card-body">
                             <h3 className="card-title">Tasks Overdue!</h3>
@@ -75,7 +112,6 @@ export const TopBar = ({
                         <li><a onClick={handleLogoutClick}>Logout</a></li>
                     </ul>
                 </div>
-
                 <div className="modal" id="my_modal_user_info">
                     <ProfileModal firstName={firstName} setFirstName={setFirstName} lastName={lastName} setLastName={setLastName} email={email} setEmail={setEmail} updateUser={updateUser} />
                 </div>

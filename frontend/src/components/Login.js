@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { user } from "reducers/User";
 import { API_URL } from "utils/urls";
-import "./Login.css";
+import "../css/Login.css";
 
 export const Login = () => {
     // State variables for login and registration
