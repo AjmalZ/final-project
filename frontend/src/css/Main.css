@@ -40,7 +40,7 @@
   border-bottom-right-radius: 0px;
 }
 
-@media (max-width: 768px) and (max-height: 844px) {
+@media (max-width: 768px) {
 
   .footerLogo,
   .headerLogo {
