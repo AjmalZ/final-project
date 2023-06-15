@@ -3,6 +3,7 @@ import { API_URL } from 'utils/urls';
 import { useDispatch, useSelector } from 'react-redux';
 import { tasks } from 'reducers/Tasks';
 
+
 export const ToDoCard = ({ task, taskItems }) => {
 
     // Get the list of categories from the Redux store
@@ -141,7 +142,7 @@ export const ToDoCard = ({ task, taskItems }) => {
                     <a href={"#" + task._id}>
                         <h1 className="text-base font-semibold text-black pt-1 pl-2">{task.title}</h1>
                         <h2 className="text-xs text-neutral-500 pt-1 pl-2">{task.message}</h2>
-                        <p> {task.dueDate ? formattedDate : ""}</p>
+                        <p className="pl-2"> {task.dueDate ? formattedDate : ""}</p>
                     </a>
                     <div className="modal" id={task._id}>
                         <div className="modal-box">
