@@ -44,7 +44,15 @@
   height: 55%;
 }
 
+.drawer-toggle:checked~.drawer-side>.drawer-overlay {
+  visibility: hidden;
+}
+
 @media (max-width: 768px) {
+
+  .drawer-content {
+    display: flex;
+  }
 
   .footerLogo,
   .headerLogo {
