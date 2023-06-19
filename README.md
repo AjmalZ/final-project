@@ -1,13 +1,33 @@
 # Final project
 
-Replace this readme with your own information about your project.
+In this final project of Technigo´s bootcamp I have created a kanban board.
 
-Start by briefly describing the assignment in a sentence or two. Keep it short and to the point.
+#Features
 
-## The problem
+* Create multiple categories
+* Create and add task and assign them to specific categories
+* Move tasks between different stages (e.g. "To Do", "In Progress" and "Done").
+* Assign due dates and track task progress.
+* Edit task details, such as due dates, descriptions, or assigned categories.
+* Drag and drop functionality for easy task management.
+* User authentication.
 
-Describe how you approached to problem, and what tools and techniques you used to solve it. How did you plan? What technologies did you use? If you had more time, what would be next?
+
+## Tools and techniques
+
+* React
+* React-router-dom
+* React-redux
+* npm
+* Node.js
+* MongoDB
+* Tailwind
+* DaisyUI
+* Bcrypt
+* Mongoose
+* Express
+
 
 ## View it live
 
-Every project should be deployed somewhere. Be sure to include the link to the deployed project so that the viewer can click around and see what it's all about.
+https://projectkanban.netlify.app
