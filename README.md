@@ -2,7 +2,7 @@
 
 In this final project of Technigo´s bootcamp I have created a kanban board.
 
-##Features
+## Features
 
 * Create multiple categories
 * Create and add task and assign them to specific categories
